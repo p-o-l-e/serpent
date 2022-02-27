@@ -1,0 +1,39 @@
+inline float fNotch(VCF *o, const float& input)
+{       
+        float z1x = *o->cutoff;
+        float b0 = (1-o->Q)*(1-o->Q)/(2*(fabs(z1x)+1)) + o->Q;
+        float b2 = b0;
+        float b1 = -2*z1x*b0;
+        float a1 = -2*z1x*o->Q;
+        float a2 = o->Q*o->Q;
+
+        o->y  = b0 * o->x0 + b1 * o->x1 + b2 * o->x2 - a1 * o->y1 - a2 * o->y2;
+        o->y2 = o->y1;
+        o->y1 = o->y;
+        o->x2 = o->x1;
+        o->x1 = o->x0;
+        o->x0 = input;
+
+        return o->y;   
+}
+
+
+float VCF::pinking(const float& s)
+{
+        b0 = 0.99886 * b0 + s * 0.0555179;
+        b1 = 0.99332 * b1 + s * 0.0750759;
+        b2 = 0.96900 * b2 + s * 0.1538520;
+        b3 = 0.86650 * b3 + s * 0.3104856;
+        b4 = 0.55000 * b4 + s * 0.5329522;
+        b5 = -0.7616 * b5 - s * 0.0168980;
+        const float pink = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + (s * 0.5362)) * 0.07;
+        b6 = s * 0.115926;
+        return pink;
+}
+ 
+float VCF::browning(const float& input)
+{
+        float brown = (l + (0.02f * input)) / 1.02f;
+        l = brown;
+        return brown ; 
+}
