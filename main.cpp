@@ -39,7 +39,7 @@ int main(int, char**)
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI| SDL_WINDOW_BORDERLESS);
-    SDL_Window* window = SDL_CreateWindow("fFFF", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 788, 490, window_flags);
+    SDL_Window* window = SDL_CreateWindow("fFFF", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 788, 510, window_flags);
 
     if (SDL_SetWindowHitTest(window, hitTest, NULL) == -1) {
         SDL_Log("Enabling hit-testing failed!\n");
@@ -298,7 +298,7 @@ int main(int, char**)
             const char* env_name4 = (o.env_form[3] >= 0 && o.env_form[3] < n_envs) ? env_names[o.env_form[3]] : "Unknown";
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            ImGui::SetNextWindowSize(ImVec2(788.0f,490.0f),0);
+            ImGui::SetNextWindowSize(ImVec2(788.0f,510.0f),0);
             ImGui::SetNextWindowPos(ImVec2(0.0f,0.0f));
             ImGui::Begin("##FF", NULL, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoBackground|ImGuiWindowFlags_NoScrollbar|ImGuiWindowFlags_NoCollapse);    
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
