@@ -3,13 +3,15 @@
 // V.0.0.1 2022-01-26
 ////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#ifndef __PRESET
-#define __PRESET
+
 #include <fstream>
 #include <iostream>
 #include <filesystem>
 #include <sstream>
 #include "spawner.hpp"
+
+#define envn 4
+#define nn	 12
 
 class preset
 {
@@ -17,8 +19,6 @@ class preset
         std::fstream ff;
         std::stringstream ss;
         const std::filesystem::path presets{"presets"};
-            
-        
 
         float   tempo   = 0.1f, 
                 seed    = 0.001;
@@ -31,14 +31,8 @@ class preset
         vector<bool> note_set = {1,0,0,0,0,0,0,0,0,0,0,0};
         vector<int>  oct_set  = {4,4,4,4,4,4,4,4,4,4,4,4};
 
-        // Octave values: o = octave; a,b,c,etc. = note; s = sharp, n = natural
-        int     oan = 3, oas = 3, obn = 3, ocn = 3,
-                ocs = 3, odn = 3, ods = 3, oen = 3,
-                ofn = 3, ofs = 3, ogn = 3, ogs = 3;
-        // Note On & Off; n = note
-        bool    nan = 1, nas = 0, nbn = 0, ncn = 0,
-                ncs = 0, ndn = 0, nds = 0, nen = 0,
-                nfn = 0, nfs = 0, ngn = 0, ngs = 0;
+        int     oct [nn]; // Octave values
+        bool    note[nn]; // Note On & Off
 
         // Center values for modulations
         float   center_amp[oscn],
@@ -55,8 +49,8 @@ class preset
         int     pwm_slider_type[oscn];
         float   cutoff[oscn];
 
-        int     env_slider_type[4];
-        int     env_form[4];
+        int     env_slider_type[envn];
+        int     env_form[envn];
 
         float   volume              = 0.05;
         int     form_vco[oscn];
@@ -76,14 +70,8 @@ class preset
         int     cutoff_mod_type[oscn];
         float   cutoff_mod_amount[oscn];
 
-        int     radio_form_env_amp_a = 1,  
-                radio_form_env_amp_b = 1;
-        int     radio_form_env_mod_a = 1,  
-                radio_form_env_mod_b = 1;
-        float   scale_env_amp_a     = 1.0f, 
-                scale_env_amp_b     = 1.0f;
-        float   scale_env_mod_a     = 1.0f, 
-                scale_env_mod_b     = 1.0f;
+        int     radio_form_env[envn];  // Implement!
+        float   scale_env[envn];
 
         bool    trigger_sequence    = true;
 
@@ -102,15 +90,10 @@ class preset
         float   lfo_a_amp = 0.5, lfo_b_amp = 0.5;
         float   lfo_morph[lfos];
         
-        envelope_adsr env_amp_a;
-        envelope_adsr env_amp_b; 
-        envelope_adsr env_mod_a;
-        envelope_adsr env_mod_b;
+        envelope_adsr env[envn];
 
-        vector<float> env_imprint_amp_a;
-        vector<float> env_imprint_amp_b;
-        vector<float> env_imprint_mod_a;
-        vector<float> env_imprint_mod_b;
+        vector<float> env_imprint[envn]; // Implement!
+
             
         vector<float> lfo_imprint_a;
         vector<float> lfo_imprint_b;
@@ -161,15 +144,12 @@ void preset::save()
     for(auto i: note_set) ff<<i<<"\n";
     for(auto i: oct_set ) ff<<i<<"\n";
 
-    ff<<oan<<"\n";  ff<<oas<<"\n";  ff<<obn<<"\n";
-    ff<<ocn<<"\n";  ff<<ocs<<"\n";  ff<<odn<<"\n";
-    ff<<ods<<"\n";  ff<<oen<<"\n";  ff<<ofn<<"\n";
-    ff<<ofs<<"\n";  ff<<ogn<<"\n";  ff<<ogs<<"\n";
 
-    ff<<nan<<"\n";  ff<<nas<<"\n";  ff<<nbn<<"\n";
-    ff<<ncs<<"\n";  ff<<ncs<<"\n";  ff<<ndn<<"\n";
-    ff<<nds<<"\n";  ff<<nen<<"\n";  ff<<nfn<<"\n";
-    ff<<nfs<<"\n";  ff<<ngn<<"\n";  ff<<ngs<<"\n";
+	for(int i=0; i<nn; i++)
+	{
+		ff<<oct[i]<<"\n"; 
+    	ff<<note[i]<<"\n";
+	}
 
     for(int i=0; i<oscn; i++) ff<<cuttoff_slider_type[i]<<"\n";
     for(int i=0; i<oscn; i++) ff<<amp_slider_type[i] <<"\n";
@@ -186,16 +166,6 @@ void preset::save()
     for(int i=0; i<oscn; i++) ff<<cutoff_mod_type[i]<<"\n";
     for(int i=0; i<oscn; i++) ff<<cutoff_mod_amount[i]<<"\n";
 
-
-    ff<<radio_form_env_amp_a<<"\n";
-    ff<<radio_form_env_amp_b<<"\n";
-    ff<<radio_form_env_mod_a<<"\n";
-    ff<<radio_form_env_mod_b<<"\n";
-    ff<<scale_env_amp_a<<"\n"; 
-    ff<<scale_env_amp_b<<"\n";
-    ff<<scale_env_mod_a<<"\n"; 
-    ff<<scale_env_mod_b<<"\n";
-
     ff<<trigger_sequence<<"\n";
 
     ff<<radio_env_amp<<"\n";
@@ -211,45 +181,22 @@ void preset::save()
     ff<<lfo_a.frequency<<"\n";
     ff<<lfo_b.frequency<<"\n";
     /// Amp Envelopes //////////////
-    ff<<env_amp_a.adsr.A.time<<"\n";
-    ff<<env_amp_a.adsr.D.time<<"\n";
-    ff<<env_amp_a.adsr.S.time<<"\n";
-    ff<<env_amp_a.adsr.R.time<<"\n";
+	for(int i=0; i<envn; i++)
+	{
+		ff<<env[i].adsr.A.time<<"\n";
+		ff<<env[i].adsr.D.time<<"\n";
+		ff<<env[i].adsr.S.time<<"\n";
+		ff<<env[i].adsr.R.time<<"\n";
 
-    ff<<env_amp_a.adsr.A.value<<"\n";
-    ff<<env_amp_a.adsr.D.value<<"\n";
-    ff<<env_amp_a.adsr.S.value<<"\n";
-    ff<<env_amp_a.adsr.R.value<<"\n";
+		ff<<env[i].adsr.A.value<<"\n";
+		ff<<env[i].adsr.D.value<<"\n";
+		ff<<env[i].adsr.S.value<<"\n";
+		ff<<env[i].adsr.R.value<<"\n";
 
-    ff<<env_amp_b.adsr.A.time<<"\n";
-    ff<<env_amp_b.adsr.D.time<<"\n";
-    ff<<env_amp_b.adsr.S.time<<"\n";
-    ff<<env_amp_b.adsr.R.time<<"\n";
+		ff<<radio_form_env[i]<<"\n"; // Implement!
+		ff<<scale_env[i]<<"\n"; 
+	}
 
-    ff<<env_amp_b.adsr.A.value<<"\n";
-    ff<<env_amp_b.adsr.D.value<<"\n";
-    ff<<env_amp_b.adsr.S.value<<"\n";
-    ff<<env_amp_b.adsr.R.value<<"\n";
-    /// Mod Envelopes //////////////
-    ff<<env_mod_a.adsr.A.time<<"\n";
-    ff<<env_mod_a.adsr.D.time<<"\n";
-    ff<<env_mod_a.adsr.S.time<<"\n";
-    ff<<env_mod_a.adsr.R.time<<"\n";
-
-    ff<<env_mod_a.adsr.A.value<<"\n";
-    ff<<env_mod_a.adsr.D.value<<"\n";
-    ff<<env_mod_a.adsr.S.value<<"\n";
-    ff<<env_mod_a.adsr.R.value<<"\n";
-
-    ff<<env_mod_b.adsr.A.time<<"\n";
-    ff<<env_mod_b.adsr.D.time<<"\n";
-    ff<<env_mod_b.adsr.S.time<<"\n";
-    ff<<env_mod_b.adsr.R.time<<"\n";
-
-    ff<<env_mod_b.adsr.A.value<<"\n";
-    ff<<env_mod_b.adsr.D.value<<"\n";
-    ff<<env_mod_b.adsr.S.value<<"\n";
-    ff<<env_mod_b.adsr.R.value<<"\n";
 
     ff<<if_square_a<<"\n";
     ff<<if_square_b<<"\n";
@@ -270,45 +217,36 @@ void preset::load()
     ff>>seed;
     ff>>octaves;
     int f=0;
-    for(size_t i=0;i<12;i++)
-    {
-        ff>>f;
+
+	for(int i=0; i<nn; i++)
+	{
+		ff>>f;
         note_set[i] = f;
         f = 0;
-    }
-    for(size_t i=0;i<12;i++) ff>>oct_set[i];
 
-    ff>>oan; ff>>oas; ff>>obn; ff>>ocn;
-    ff>>ocs; ff>>odn; ff>>ods; ff>>oen;
-    ff>>ofn; ff>>ofs; ff>>ogn; ff>>ogs;
-
-    ff>>nan; ff>>nas; ff>>nbn; ff>>ncn;
-    ff>>ncs; ff>>ndn; ff>>nds; ff>>nen;
-    ff>>nfn; ff>>nfs; ff>>ngn; ff>>ngs;
-
-    for(int i=0; i<oscn; i++) ff>>cuttoff_slider_type[i];
-    for(int i=0; i<oscn; i++) ff>>amp_slider_type[i];
-    for(int i=0; i<oscn; i++) ff>>phase_slider_type[i];
-    for(int i=0; i<oscn; i++) ff>>cutoff[i];
-
-    for(int i=0; i<oscn; i++) ff>>amp_mod_type[i];
-    for(int i=0; i<oscn; i++) ff>>amp_mod_amount[i];
-    for(int i=0; i<oscn; i++) ff>>pwm_mod_type[i];
-    for(int i=0; i<oscn; i++) ff>>pwm_mod_amount[i];
-    for(int i=0; i<oscn; i++) ff>>phase_mod_type[i];
-    for(int i=0; i<oscn; i++) ff>>phase_mod_amount[i];
-    for(int i=0; i<oscn; i++) ff>>cutoff_mod_type[i];
-    for(int i=0; i<oscn; i++) ff>>cutoff_mod_amount[i];
+		ff>>oct_set[i];
+		ff>>oct[i];
+    	ff>>note[i];
+	}
 
 
-    ff>>radio_form_env_amp_a;
-    ff>>radio_form_env_amp_b;
-    ff>>radio_form_env_mod_a;
-    ff>>radio_form_env_mod_b;
-    ff>>scale_env_amp_a; 
-    ff>>scale_env_amp_b;
-    ff>>scale_env_mod_a; 
-    ff>>scale_env_mod_b;
+    for(int i=0; i<oscn; i++) 
+	{
+		ff>>cuttoff_slider_type[i];
+		ff>>amp_slider_type[i];
+		ff>>phase_slider_type[i];
+		ff>>cutoff[i];
+
+		ff>>amp_mod_type[i];
+		ff>>amp_mod_amount[i];
+		ff>>pwm_mod_type[i];
+		ff>>pwm_mod_amount[i];
+		ff>>phase_mod_type[i];
+		ff>>phase_mod_amount[i];
+		ff>>cutoff_mod_type[i];
+		ff>>cutoff_mod_amount[i];
+	}
+	
 
     ff>>trigger_sequence;
 
@@ -327,46 +265,21 @@ void preset::load()
     ff>>lfo_b.frequency;
 
     /// Amp Envelopes ////////
-    ff>>env_amp_a.adsr.A.time;
-    ff>>env_amp_a.adsr.D.time;
-    ff>>env_amp_a.adsr.S.time;
-    ff>>env_amp_a.adsr.R.time;
+	for(int i=0; i<envn; i++)
+	{
+		ff>>env[i].adsr.A.time;
+		ff>>env[i].adsr.D.time;
+		ff>>env[i].adsr.S.time;
+		ff>>env[i].adsr.R.time;
 
-    ff>>env_amp_a.adsr.A.value;
-    ff>>env_amp_a.adsr.D.value;
-    ff>>env_amp_a.adsr.S.value;
-    ff>>env_amp_a.adsr.R.value;
+		ff>>env[i].adsr.A.value;
+		ff>>env[i].adsr.D.value;
+		ff>>env[i].adsr.S.value;
+		ff>>env[i].adsr.R.value;
 
-    ff>>env_amp_b.adsr.A.time;
-    ff>>env_amp_b.adsr.D.time;
-    ff>>env_amp_b.adsr.S.time;
-    ff>>env_amp_b.adsr.R.time;
-
-    ff>>env_amp_b.adsr.A.value;
-    ff>>env_amp_b.adsr.D.value;
-    ff>>env_amp_b.adsr.S.value;
-    ff>>env_amp_b.adsr.R.value;
-
-    /// Mod Envelopes ////////
-    ff>>env_mod_a.adsr.A.time;
-    ff>>env_mod_a.adsr.D.time;
-    ff>>env_mod_a.adsr.S.time;
-    ff>>env_mod_a.adsr.R.time;
-
-    ff>>env_mod_a.adsr.A.value;
-    ff>>env_mod_a.adsr.D.value;
-    ff>>env_mod_a.adsr.S.value;
-    ff>>env_mod_a.adsr.R.value;
-
-    ff>>env_mod_b.adsr.A.time;
-    ff>>env_mod_b.adsr.D.time;
-    ff>>env_mod_b.adsr.S.time;
-    ff>>env_mod_b.adsr.R.time;
-
-    ff>>env_mod_b.adsr.A.value;
-    ff>>env_mod_b.adsr.D.value;
-    ff>>env_mod_b.adsr.S.value;
-    ff>>env_mod_b.adsr.R.value;
+		ff>>radio_form_env[i]; // Implement!
+		ff>>scale_env[i]; 
+	}
 
     ff>>if_square_a;
     ff>>if_square_b;
@@ -385,10 +298,19 @@ preset::preset()
         lfo_b.init(true);  
         lfo_imprint_a = imprint(&lfo_a, 120, 1);
         lfo_imprint_b = imprint(&lfo_b, 120, 1); 
+		for(int i=0; i<nn; i++)
+		{
+			note[i]=0;
+		}
+		note[0] = 1;
         for(int osc=0; osc<oscn; osc++)
         {
             octave[osc] = 1;
         } 
+		for(int i=0; i<envn; i++)
+		{
+			scale_env[i]=1.0f; 
+		}
 }
 
 preset::~preset()
@@ -398,5 +320,3 @@ preset::~preset()
 extern preset o;
 
 
-
-#endif
