@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // PRESET
-// V.0.0.1 2022-01-26
+// V.0.0.1 2022-01-2
 ////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
@@ -10,7 +10,8 @@
 #include <sstream>
 #include "spawner.hpp"
 
-#define envn 4
+#define envn 6
+#define lfos 4
 #define nn	 12
 
 class preset
@@ -79,24 +80,20 @@ class preset
                 radio_env_mod       = true;
 
 
-        int     lfo_imprint_a_type = 0, 
-                lfo_imprint_b_type = 0;
-        int     lfo_a_mod_type,
-                lfo_b_mod_type;
-        float   lfo_a_mod_amount,
-                lfo_b_mod_amount;
+        int     lfo_imprint_type[lfos];
+        int     lfo_mod_type[lfos];
+        float   lfo_mod_amount[lfos];
 
-        LFO     lfo_a, lfo_b;
-        float   lfo_a_amp = 0.5, lfo_b_amp = 0.5;
+
+        LFO     lfo[lfos];
+        float   lfo_amp[lfos];
         float   lfo_morph[lfos];
         
         envelope_adsr env[envn];
 
         vector<float> env_imprint[envn]; // Implement!
+        vector<float> lfo_imprint[lfos];
 
-            
-        vector<float> lfo_imprint_a;
-        vector<float> lfo_imprint_b;
 
         bool    if_square_a = false, 
                 if_square_b = false;
@@ -171,15 +168,15 @@ void preset::save()
     ff<<radio_env_amp<<"\n";
     ff<<radio_env_mod<<"\n";
 
-    ff<<lfo_imprint_a_type<<"\n";
-    ff<<lfo_imprint_b_type<<"\n";
-    ff<<lfo_a_mod_type<<"\n";
-    ff<<lfo_b_mod_type<<"\n";
-    ff<<lfo_a_mod_amount<<"\n";
-    ff<<lfo_b_mod_amount<<"\n";
+    ff<<lfo_imprint_type[0]<<"\n";
+    ff<<lfo_imprint_type[1]<<"\n";
+    ff<<lfo_mod_type[0]<<"\n";
+    ff<<lfo_mod_type[1]<<"\n";
+    ff<<lfo_mod_amount[0]<<"\n";
+    ff<<lfo_mod_amount[1]<<"\n";
 
-    ff<<lfo_a.frequency<<"\n";
-    ff<<lfo_b.frequency<<"\n";
+    ff<<lfo[0].frequency<<"\n";
+    ff<<lfo[1].frequency<<"\n";
     /// Amp Envelopes //////////////
 	for(int i=0; i<envn; i++)
 	{
@@ -253,16 +250,16 @@ void preset::load()
     ff>>radio_env_amp;
     ff>>radio_env_mod;
 
-    ff>>lfo_imprint_a_type;
-    ff>>lfo_imprint_b_type;
-    ff>>lfo_a_mod_type;
-    ff>>lfo_b_mod_type;
-    ff>>lfo_a_mod_amount;
-    ff>>lfo_b_mod_amount;
+    ff>>lfo_imprint_type[0];
+    ff>>lfo_imprint_type[1];
+    ff>>lfo_mod_type[0];
+    ff>>lfo_mod_type[1];
+    ff>>lfo_mod_amount[0];
+    ff>>lfo_mod_amount[1];
 
 
-    ff>>lfo_a.frequency;
-    ff>>lfo_b.frequency;
+    ff>>lfo[0].frequency;
+    ff>>lfo[1].frequency;
 
     /// Amp Envelopes ////////
 	for(int i=0; i<envn; i++)
@@ -290,14 +287,17 @@ void preset::load()
 
 preset::preset()
 {
-        lfo_a.amplitude = &lfo_a_amp;
-        lfo_b.amplitude = &lfo_b_amp;
-        lfo_a.morph = &lfo_morph[0];
-        lfo_b.morph = &lfo_morph[1];
-        lfo_a.init(true);
-        lfo_b.init(true);  
-        lfo_imprint_a = imprint(&lfo_a, 120, 1);
-        lfo_imprint_b = imprint(&lfo_b, 120, 1); 
+        lfo_amp[0] = 0.5f;
+        lfo_amp[1] = 0.5f;
+
+        lfo[0].amplitude = &lfo_amp[0];
+        lfo[1].amplitude = &lfo_amp[1];
+        lfo[0].morph = &lfo_morph[0];
+        lfo[1].morph = &lfo_morph[1];
+        lfo[0].init(true);
+        lfo[1].init(true);  
+        lfo_imprint[0] = imprint(&lfo[0], 120, 1);
+        lfo_imprint[1] = imprint(&lfo[1], 120, 1); 
 		for(int i=0; i<nn; i++)
 		{
 			note[i]=0;

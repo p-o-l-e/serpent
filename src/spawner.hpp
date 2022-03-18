@@ -23,7 +23,8 @@
 using std::vector;
 #define poly    8       // Polyphony
 #define oscn    3       // Number of oscillators
-#define lfos    2       // Number of LFOs
+#define envn    6       // Number of envelopes
+#define lfos    4       // Number of LFOs
 #define xm      9       // Modulation matrix X
 #define ym      23      // Modulation matrix Y
 #define zm      2       // Modulation matrix Z
@@ -34,12 +35,13 @@ class spawner
     public:
         circular* data;
         waveform_processor wpr;
-        serpent   esq;
+        envelope_adsr env[envn];                    // Modulation envelopes
+        serpent esq;
         delay  dd[3];
         VCO    vco[oscn][poly];
         LFO    lfo[lfos];  
         VCF    vcf[oscn];                           // One filter per VCO
-        ADSR   env[oscn*2];                         // Envelope imprints
+        ADSR   adsr[envn];                          // Envelope imprints
         float  modmatrix[xm][ym][zm];               // Modulation matrix
         float  cvin[ym];                            // Control values input
         int    form_vco[oscn];                      // Oscillator waveform
@@ -63,6 +65,7 @@ class spawner
         inline void init(void);
         inline void trigger(void);
         inline void iterate(const int&, const int&);
+        inline void iterate_modulators(void);
         inline void set_modulation();
         inline void start_envelopes();
         inline void clear_matrix();
@@ -77,12 +80,9 @@ void spawner::spawn(void)
 {
     for(size_t i=0; i<settings.buffer_size/2; i++)
     {
-        if(departed-esq.offset >esq.step)
-        {
-            trigger();
-        }
-        form_lfo[lfo[0].form](&lfo[0]);
-        form_lfo[lfo[1].form](&lfo[1]);
+        if(departed-esq.offset > esq.step) trigger();
+        iterate_modulators();
+
         out[0] = 0.0f;
         out[1] = 0.0f;
         out[2] = 0.0f;
@@ -91,11 +91,6 @@ void spawner::spawn(void)
         {
             if(freerun[osc])
             {
-                if(vco[osc][0].env_mod.state == envelope_adsr::STAGE::OFF)
-                {
-                    vco[osc][0].env_mod.start();
-                }
-                vco[osc][0].env_mod.iterate();
                 set_modulation();
                 form[form_vco[osc]](&vco[osc][0]);
                 out[osc] += vco[osc][0].out;
@@ -109,9 +104,9 @@ void spawner::spawn(void)
                     {
                         set_modulation();
                         iterate(osc, voice);
-                        out[osc] += vco[osc][voice].out * vco[osc][voice].env_amp.iterate();
+                        out[osc] += vco[osc][voice].out * vco[osc][voice].env.iterate();
                         out[osc] = form_filter[form_vcf[osc]](&vcf[osc], out[osc]);
-                        if(vco[osc][voice].env_amp.state==envelope_adsr::STAGE::OFF)
+                        if(vco[osc][voice].env.state==envelope_adsr::STAGE::OFF)
                         {
                             vco[osc][voice].on = false;
                         }
@@ -131,10 +126,19 @@ void spawner::spawn(void)
 void spawner::iterate(const int& osc, const int& voice)
 {
         form[form_vco[osc]](&vco[osc][voice]);
-        vco[osc][voice].env_amp.iterate();
-        vco[osc][voice].env_mod.iterate();
+        vco[osc][voice].env.iterate();
 }
 
+void spawner::iterate_modulators(void)
+{
+        form_lfo[lfo[0].form](&lfo[0]);
+        form_lfo[lfo[1].form](&lfo[1]);
+        for(int i=0; i<envn; i++)
+        {
+            if(env[i].state == envelope_adsr::STAGE::OFF) env[i].start();
+            env[i].iterate();
+        }
+}
 
 void spawner::trigger()
 {
@@ -183,10 +187,8 @@ void spawner::start_envelopes()
         if(!freerun[osc])
         {
             vco[osc][free[osc]].on = true;
-            vco[osc][free[osc]].env_amp.start();
-        }
-        if(vco[osc][free[osc]].env_mod.state == envelope_adsr::STAGE::OFF)
-        vco[osc][free[osc]].env_mod.start();
+            vco[osc][free[osc]].env.start();
+        }        
     }
 }
 
@@ -194,10 +196,13 @@ void spawner::init(void)
 {
     for(int osc=0; osc<oscn; osc++)
     {
-        vco[osc][free[osc]].env_amp.adsr = env[osc];  
-        vco[osc][free[osc]].env_mod.adsr = env[osc+2];   
+        vco[osc][free[osc]].env.adsr = adsr[osc];  // Envelope ADSR 
         vco[osc][free[osc]].frequency= esq.note*octave[osc];
         vco[osc][free[osc]].init();
+    }
+    for(int i=0;i<envn;i++)
+    {
+        env[i].adsr = adsr[i]; // Modulation ADSR
     }
 }
 
@@ -249,7 +254,8 @@ spawner::spawner(circular* buffer): data(buffer)
     {
         free[osc]   = 0;
         octave[osc] = 1;
-    } 
+    }
+
     for(int v=0; v<poly; v++)
     {
         vco[0][v].amplitude  = &cvin[0];
@@ -273,9 +279,6 @@ spawner::spawner(circular* buffer): data(buffer)
         vcf[1].cutoff        = &cvin[10];
         vcf[2].cutoff        = &cvin[11];
 
-        // lfo[0].amplitude     = &cvin[12];
-        // lfo[1].amplitude     = &cvin[13];
-
         lfo[0].morph         = &cvin[12];
         lfo[1].morph         = &cvin[13];
 
@@ -286,7 +289,6 @@ spawner::spawner(circular* buffer): data(buffer)
         dd[0].time           = &cvin[20];
         dd[1].time           = &cvin[21];
         dd[2].time           = &cvin[22];
-
 
         wpr.amount = &volume;
         wpr.source[0]  = &out[0];
@@ -304,22 +306,22 @@ spawner::~spawner()
 
 void mfEnvA(spawner* o, int target, float amount, float center)
 {
-    o->cvin[target] = o->vco[0]->env_mod.out * amount * 2.0f + center;
+    o->cvin[target] = o->env[0].out * amount + center;
 }
 
 void mfEnvB(spawner* o, int target, float amount, float center)
 {
-    o->cvin[target] = o->vco[1]->env_mod.out * amount * 2.0f + center;
+    o->cvin[target] = o->env[1].out * amount + center;
 }
 
 void mfEnvC(spawner* o, int target, float amount, float center)
 {
-    o->cvin[target] = o->vco[0]->env_mod.out * amount * 2.0f + center;
+    o->cvin[target] = o->env[2].out * amount + center;
 }
 
 void mfEnvD(spawner* o, int target, float amount, float center)
 {
-    o->cvin[target] = o->vco[1]->env_mod.out * amount * 2.0f + center;
+    o->cvin[target] = o->env[3].out * amount + center;
 }
 
 void mfLfoA(spawner* o, int target, float amount, float center) 

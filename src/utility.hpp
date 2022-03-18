@@ -136,6 +136,24 @@ struct allpass
     }    
 };
 
+
+struct sample_n_hold
+{
+    int t = 0;
+    float value = 0;
+
+    float process(const float& input, const int& time)
+    {
+        if (t>time)
+        {
+            t = 0;
+            value = input;
+        }
+        t++;
+        return value;
+    }
+};
+
 // Crossfader: f == 1? a = max; f==0? b = max //////////////
 float xfade(const float& a, const float& b, const float& f)
 {

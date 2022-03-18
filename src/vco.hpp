@@ -22,8 +22,7 @@ iospecs settings;
 class VCO
 {
     public:
-        envelope_adsr env_amp;
-        envelope_adsr env_mod;
+        envelope_adsr env;
         int     nharm;                // Number of harmonics
         float   sample_rate;          // System sample rate
         float   phase;                // Current phase
