@@ -21,6 +21,7 @@ class preset
         std::stringstream ss;
         const std::filesystem::path presets{"presets"};
 
+        float   volume  = 0.05;
         float   tempo   = 0.1f, 
                 seed    = 0.001;
         uint    beat    = 0x80808080;
@@ -53,7 +54,7 @@ class preset
         int     env_slider_type[envn];
         int     env_form[envn];
 
-        float   volume              = 0.05;
+        
         int     form_vco[oscn];
 
         int     amp_mod_type[oscn];
@@ -148,20 +149,21 @@ void preset::save()
     	ff<<note[i]<<"\n";
 	}
 
-    for(int i=0; i<oscn; i++) ff<<cuttoff_slider_type[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<amp_slider_type[i] <<"\n";
-    for(int i=0; i<oscn; i++) ff<<phase_slider_type[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<cutoff[i]<<"\n";
-
-
-    for(int i=0; i<oscn; i++) ff<<amp_mod_type[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<amp_mod_amount[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<pwm_mod_type[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<pwm_mod_amount[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<phase_mod_type[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<phase_mod_amount[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<cutoff_mod_type[i]<<"\n";
-    for(int i=0; i<oscn; i++) ff<<cutoff_mod_amount[i]<<"\n";
+    for(int i=0; i<oscn; i++) 
+    {
+        ff<<cuttoff_slider_type[i]<<"\n";
+        ff<<amp_slider_type[i] <<"\n";
+        ff<<phase_slider_type[i]<<"\n";
+        ff<<cutoff[i]<<"\n";
+        ff<<amp_mod_type[i]<<"\n";
+        ff<<amp_mod_amount[i]<<"\n";
+        ff<<pwm_mod_type[i]<<"\n";
+        ff<<pwm_mod_amount[i]<<"\n";
+        ff<<phase_mod_type[i]<<"\n";
+        ff<<phase_mod_amount[i]<<"\n";
+        ff<<cutoff_mod_type[i]<<"\n";
+        ff<<cutoff_mod_amount[i]<<"\n";
+    }
 
     ff<<trigger_sequence<<"\n";
 

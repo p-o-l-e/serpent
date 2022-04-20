@@ -1,0 +1,107 @@
+// Allpass interpolating delay line class.
+// This class implements a fractional-length digital delay-line using
+// a first-order allpass filter.
+
+class faDelay 
+{
+    private:
+        float*  data;
+        uint    length = 4096, inPoint, outPoint;
+        float   time, alpha, coeff, last = 0.0;
+        float   apInput = 0.0, nextOutput = 0.0;
+        bool    doNextOut = true;
+
+    public:
+        void    setDelay(float d);
+        void    clear();
+        float   process(float in);
+        faDelay(uint l = 4096);
+        ~faDelay();
+};
+
+
+
+faDelay::faDelay(uint l):length(l)
+{
+    data = new float[length];
+    clear();
+}
+
+faDelay::~faDelay() 
+{
+    delete data;
+}
+
+void faDelay::setDelay(float t) 
+{
+    float outPointer = inPoint - t + 1.0; // outPoint chases inpoint
+    time = t;
+    while (outPointer < 0) 
+    {
+        outPointer += length; // modulo maximum length
+    }
+    outPoint = (int) outPointer; // integer part
+    if (outPoint == length) 
+    {
+        outPoint = 0;
+    }
+    alpha = 1.0 + outPoint - outPointer; // fractional part
+    if (alpha < 0.5) 
+    {
+        // The optimal range for alpha is about 0.5 - 1.5 in order to
+        // achieve the flattest phase delay response.
+        outPoint += 1;
+        if (outPoint >= length) 
+        {
+            outPoint -= length;
+        }
+        alpha += 1.0f;
+    }
+    coeff = (1.0 - alpha) / (1.0 + alpha); // coefficient for allpass
+}
+
+
+void faDelay::clear() 
+{
+    for (uint i = 0; i < length; i++) 
+    {
+        data[i] = 0.0f;
+    }
+    last = 0.0;
+    inPoint = 0;
+    apInput = 0.0;
+}
+
+
+
+float faDelay::process(float input) 
+{
+    data[inPoint++] = input;
+    if (inPoint == length) 
+    {
+        inPoint = 0;
+    }
+
+    // Do allpass interpolation delay.
+    nextOutput = -coeff * last;
+    nextOutput += apInput + (coeff * data[outPoint]);
+    
+    last = nextOutput;
+
+    // Save the allpass input and increment modulo length.
+    apInput = data[outPoint++];
+    if (outPoint == length) 
+    {
+        outPoint = 0;
+    }
+    return last;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+

@@ -32,10 +32,6 @@
 // Roessler ////////////////////////////////////////////////////////////////////////////
 struct roessler
 {
-	float	dx = 0.0f;
-	float	dy = 0.0f;
-	float	dz = 0.0f;
-
 	float	x = 1.0f;
 	float	y = 1.0f;
 	float	z = 1.0f;
@@ -44,32 +40,286 @@ struct roessler
 	float	b = 0.2f;
 	float	c = 5.7f;
 
-	float	delta = 1.0f;
+	float	delta = 0.01f;
     
     void    iterate();
 };
 
 void roessler::iterate()
 {
-	dx = -y - z;
-	dy = x + a * y;
-	dz = b + z * (x - c);
+	x += (-y - z)*delta;
+	y += (x + a * y)*delta;
+	z += (b + z * (x - c))*delta;
+}
 
-	x += dx * delta;
-	y += dy * delta;
-	z += dz * delta;
+////////////////////////////////////////////////////////////////////////////////////////
+// Hopf ////////////////////////////////////////////////////////////////////////////
+struct hopf
+{
+	float	x = 0.01f;
+	float	y = 0.01f;
+
+	float	p = 0.11f;
+    float   t = 0.01f;
+
+    void    iterate();
+};
+
+void hopf::iterate()
+{
+	x += t * ( -y + x * (p - (x*x + y*y)));
+	y += t * (  x + y * (p - (x*x + y*y)));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Helmholz ////////////////////////////////////////////////////////////////////////////
+struct helmholz
+{
+	float	x = 0.1f;
+	float	y = 0.1f;
+    float   z = 0.1f;
+
+	float	gamma = 5.11f;
+	float	delta = 0.55f;
+    float   t     = 0.01;
+    
+    void    iterate();
+};
+
+void helmholz::iterate()
+{
+	x += t * y;
+	y += t * gamma * z;
+    z += t * ( -z - delta * y - x - x * x );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Sprott ////////////////////////////////////////////////////////////////////////////
+struct sprott
+{
+	float	x = 0.1f;
+	float	y = 0.1f;
+    float   z = 0.1f;
+
+    float   t = 0.1;
+    
+    void    iterate();
+};
+
+void sprott::iterate()
+{
+	x += t * y;
+	y += t * (y * z - x);
+    z += t * (1.0f - y * y);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Sprott-Linz ////////////////////////////////////////////////////////////////////////////
+struct linz
+{
+	float	x = 0.1f;
+	float	y = 0.1f;
+    float   z = 0.1f;
+
+    float   a = 0.5f;
+    float   t = 0.1;
+    
+    void    iterate();
+};
+
+void linz::iterate()
+{
+	x += t * (y + z);
+	y += t * (y * a - x);
+    z += t * (x * x - z);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Sprott-Linz D ////////////////////////////////////////////////////////////////////////////
+struct linz_d
+{
+	float	x = 0.1f;
+	float	y = 0.1f;
+    float   z = 0.1f;
+
+    float   a = 3.0f;
+    float   t = 0.01;
+    
+    void    iterate();
+};
+
+void linz_d::iterate()
+{
+	x += t * (-y);
+	y += t * (x + z);
+    z += t * (x * z + a*y*y);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Sprott 6-term ////////////////////////////////////////////////////////////////////////////
+struct sprott_st
+{
+	float	x = 0.1f;
+	float	y = 0.1f;
+    float   z = 0.1f;
+
+	float	a = 0.8f;
+	float	b = 0.5f;
+    float   c = 0.1f;
+    float   d = 1.0f;
+    float   t = 0.01f;
+    
+    void    iterate();
+};
+
+void sprott_st::iterate()
+{
+	x += t * y * a;
+	y += t * (- y*z - x);
+    z += t * (b * y * y - c * x - d);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Rayleigh-Benard ////////////////////////////////////////////////////////////////////////////
+struct rayleigh
+{
+	double	x = 0.01f;
+	double	y = 0.0f;
+    double  z = 0.0f;
+
+	float	a = 9.00f;
+	float	r = 12.0f;
+    float   b = 5.00f;
+
+    float   t = 0.19f;
+    
+    void    iterate();
+};
+
+void rayleigh::iterate()
+{
+	x = t * (- a*x + a*y);
+	y = t * (r*x - y - x*z);
+    z = t * (x*y - b*z);
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Wang ////////////////////////////////////////////////////////////////////////////
+struct wang
+{
+	float	x = 0.1f;
+	float	y = 0.1f;
+    float   z = 0.1f;
+    float   w;
+
+	float	a = 27.5f;
+	float	b = 3.0f;
+    float   c = 19.3f;
+    float   d = 3.3f;
+    float   h = 2.9f;
+    float   t = 0.001;
+    
+    void    iterate();
+};
+
+void wang::iterate()
+{
+	x += t * a * (y - x);
+	y += t * (b * x + c * y - x * z + w);
+    z += t * (y * y - h * z);
+    w  = d * -y;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Yu-Wang ////////////////////////////////////////////////////////////////////////////
+struct yu_wang
+{
+	float	x = 0.1f;
+	float	y = 0.1f;
+    float   z = 0.1f;
+
+	float	a = 10.0f;
+	float	b = 40.0f;
+    float   c = 2.0f;
+    float   d = 2.5f;
+
+    float   t = 0.001;
+    
+    void    iterate();
+};
+
+void yu_wang::iterate()
+{
+	x += t * a * (y - x);
+	y += t * (b * x - c * x * z);
+    z += t * (pow(M_E, x*y) - d * z);
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Three-Scroll Unified Chaotic System (TSUCS) ////////////////////////////////////////////////////////////////////////////
+struct tsucs
+{
+	float	x = 1.0f;
+	float	y = 1.0f;
+    float   z = 1.0f;
+
+	float	a = 40.0f;
+	float	b = 0.5f;
+    float   c = 20.0f;
+    float   d = 0.833f;
+    float   e = 0.65f;
+
+    float   t = 0.001;
+    
+    void    iterate();
+};
+
+void tsucs::iterate()
+{
+	x += t * (a*(y-x) + b*x*z);
+	y += t * (c*y - x*z);
+    z += t * (d*z + x*y - e*x*x);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Three-Scroll Unified Chaotic System (TSUCS2) ////////////////////////////////////////////////////////////////////////////
+struct tsucs2
+{
+	float	x = 1.0f;
+	float	y = 1.0f;
+    float   z = 1.0f;
+
+	float	a = 40.0f;
+	float	b = 0.16f;
+    float   c = 55.0f;
+    float   d = 20.0f;
+    float   e = 1.833f;
+    float   f = 0.65f;
+
+    float   t = 0.001;
+    
+    void    iterate();
+};
+
+void tsucs2::iterate()
+{
+	x += t * (a*(y-x) + b*x*z);
+	y += t * (c*y - x*z + d*y);
+    z += t * (e*z + x*y - f*x*x);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Lorenz //////////////////////////////////////////////////////////////////////////////
-class lorenz
+struct lorenz
 {
-    private:
-        float xt = 0;
-        float yt = 0;
-        float zt = 0;
-
-    public:
         float a = 10.0;
         float b = 28.0;
         float c = 8.0 / 3.0;
@@ -79,17 +329,63 @@ class lorenz
         float y = 0;
         float z = 0; 
 
-        float	delta = 1.0f;
+        float delta = 1.0f;
 
-        void iterate(){
-                xt = x + t * a * (y - x);
-                yt = y + t * (x * (b - z) - y);
-                zt = z + t * (x * y - c * z);
-                x = xt * delta;
-                y = yt * delta;
-                z = zt * delta;
+        void iterate()
+        {
+                x += t * a * (y - x) * delta;
+                y += t * (x * (b - z) - y) * delta;
+                z += t * (x * y - c * z) * delta;
         }
 };
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Aizawa //////////////////////////////////////////////////////////////////////////////
+struct aizawa
+{
+        float a = 0.95f;
+        float b = 0.7f;
+        float c = 0.6f;
+        float d = 3.5f;
+        float e = 0.25f;
+        float f = 0.1f;
+
+        float t = 0.01f; 
+
+        float x = 0.1; 
+        float y = 0;
+        float z = 0; 
+
+        void iterate()
+        {
+                x += t * ((z - b) * x - d * y);
+                y += t * ((z - b) * y + d * x);
+                z += t * (c + a*z - z*z*z/3.0f - (x*x+y*y)*(1.0f+e*z) + f*z*x*x*x);
+        }
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Halvorsen //////////////////////////////////////////////////////////////////////////////
+struct halvorsen
+{
+        float a = 1.4;
+        float t = 0.01; 
+
+        float x = 0.1; 
+        float y = 0;
+        float z = 0; 
+
+
+
+        void iterate()
+        {
+                x += t * (-a * x - 4.0f * y - 4.0f * z - y * y);
+                y += t * (-a * y - 4.0f * z - 4.0f * x - z * z);
+                z += t * (-a * z - 4.0f * x - 4.0f * y - x * x);
+        }
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Ikeda ///////////////////////////////////////////////////////////////////////////////
@@ -100,16 +396,12 @@ struct ikeda
 	float x = 0.8;
 	float y = 0.7;
 	float t;
-	float ax, ay;
-
 
     void iterate()
 	{ 
-        t = 0.4 - 6 / (1 + x*x + y*y);
-        ax = 1 + u * (x * cos(t) - y * sin(t));
-        ay = u * (x * sin(t) + y * cos(t));
-        x = ax;
-        y = ay;
+        t  = 0.4f - 6.0f / (1.0f + x * x + y * y);
+        x  = 1.0f + u * (x * cos(t) - y * sin(t));
+        y  = u * (x * sin(t) + y * cos(t));
 	}
 };
 
@@ -117,19 +409,16 @@ struct ikeda
 // Duffing /////////////////////////////////////////////////////////////////////////////
 struct duffing
 {
-	float x;
-	float y;
-	float ax;
-	float ay;
+	float x = 0.1f;
+	float y = 0.1f;
+
 	float a = 2.75f;
 	float b = 0.2f;
 
 	void iterate()
 	{
-		ax = y;
-		ay = -b*x + a*y - y*y*y;
-		x = ax;
-		y = ay;
+		x = y;
+		y = (-b*x + a*y - y*y*y);
 	}
 };
 
@@ -139,19 +428,23 @@ struct henon
 {
 	float x;
 	float y;
-	float ax;
-	float ay;
+    float dy, dx;
+
 	float a = 1.4f;
 	float b = 0.3f;
 
+    float t = 1.0f;
+
 	void iterate()
 	{
-		ax = 1-a*x*x+y;
-		ay = b*x;
-		x = ax;
-		y = ay;
+		dx = t * (1.0f - a * x * x + y);
+		dy = t * b * x;
+
+        x = dx;
+        y = dy;
 	}
 };
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Gingerbreadman //////////////////////////////////////////////////////////////////////
@@ -159,15 +452,11 @@ struct gingerbreadman
 {
 	float x;
 	float y;
-	float ax;
-	float ay;
 
 	void iterate()
 	{
-		ax = 1-y+abs(x);
-		ay = x;
-		x = ax;
-		y = ay;
+		x = 1.0f - y + abs(x);
+		y = x;
 	}
 };
 
@@ -175,22 +464,19 @@ struct gingerbreadman
 // Van Der Pol /////////////////////////////////////////////////////////////////////////
 struct vanderpol
 {
-	float x;
-	float y;
+	float x = 0.1f;
+	float y = 0.1f;
 	float f = 1.2f;
-	float mu;
-	float delta;
+    float t = 0.1f;
+	float m = 1.0f;
 
 	void iterate();
 };
 
 void vanderpol::iterate()
 {
-	float ax = x + y * delta;
-	float ay = y + (mu * (f - x * x) * y - x + f*sinf(y*delta)) * delta;
-    //float ay = y + (mu * (1 - x * x) * y - x + f*sinf(delta)) * delta;
-	x = ax;
-	y = ay;
+	x += t * y;
+	y += t * (m * (f - x * x) * y - x);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -201,6 +487,7 @@ struct kaplan_yorke
 	float y;
     int a   = 0xFFFFFFFF;
     int b   = 2147483647;
+    float t = 0.1f;
 	float alpha;
 
 	void iterate();
@@ -208,12 +495,10 @@ struct kaplan_yorke
 
 void kaplan_yorke::iterate()
 {
-    int   aa = 2 * a % b;
-	float ax = float(a) / float(b);
-	float ay = alpha*y + cos(4*M_PI*x);
+    int aa = 2 * a % b;
+	x += t * (float(a) / float(b));
+	y += t * (alpha*y + cos(4.0f * M_PI * x));
     a = aa;
-	x = ax;
-	y = ay;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -222,8 +507,8 @@ struct rabinovich_fabrikant
 {
     float gamma = 0.87f;
     float alpha = 1.1f;
-    float x, y, z;
-    float ax, ay, az;
+    float x = 0.1f, y = 0.1f, z = 0.1f;
+    float t = 0.01f;
 
     void iterate();
 
@@ -231,60 +516,59 @@ struct rabinovich_fabrikant
 
 void rabinovich_fabrikant::iterate() 
 {
-    ax = y*(x-1+x*x)+gamma*x;
-    ay = x*(3*z+1-x*x)+gamma*y;
-    az = -2*z*(alpha+x*y);
-    x = ax;
-    y = ay;
-    z = az;
+    x += t * (y*(x-1+x*x)+gamma*x);
+    y += t * (x*(3*z+1-x*x)+gamma*y);
+    z += t * (-2*z*(alpha+x*y));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Chen-Lee ////////////////////////////////////////////////////////////////////////////
 struct chen_lee
 {
-    float a, b, c;
-    float x, y, z;
-    float ax, ay, az;
+    float a = 45.0f, b = 3.0f, c = 28.0f;
+    float x = 1, y = 1, z = 1;
+    float t = 0.0035f;
 
     void iterate();
 };
 
 void chen_lee::iterate()
 {
-    ax = -y*z+a*x;
-    ay = x*z-b*y;
-    az = (1/3)*x*y-c*z;
-    x = ax;
-    y = ay;
-    z = az;
+    x += t * a * (y - x);
+    y += t * ((c - a) * x - x*z + c*y);
+    z += t * (x*y - b*z);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Chua ////////////////////////////////////////////////////////////////////////////////
 struct chua
 {
-    float x, y, z;  // Ins
+    float x = 1, y = 1, z = 1;  // Ins
 
     float alpha  =  15.6;
     float beta   =  28; 
-    float m0     = -1.143;
-    float m1     = -0.714;
+    float ma     = -1.143;
+    float mb     = -0.714;
     float h;
+    float t = 0.1f;
     
-    float xdot;
-    float ydot;
-    float zdot;
+    float dx;
+    float dy;
+    float dz;
    
     void iterate();
 };
 
 void chua::iterate()
 {
-    h    = m1*x+0.5*(m0-m1)*(abs(x+1)-abs(x-1));
-    xdot = alpha*(y-x-h);
-    ydot = x - y+ z;
-    zdot = -beta*y;
+    h  = ma * x + 0.5f * (ma - mb) * (abs(x + 1.0f) - abs(x - 1.0f));
+    dx = t * (alpha * (y - x - h));
+    dy = t * (x - y + z);
+    dz = t * (- beta * y);
+
+    x=dx;
+    y=dy;
+    z=dz;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +603,7 @@ struct realchua
 
     // Gyrator ////////////////////
     float R7    = 100;  // 100 Ohms
-    float R8    = 1000; //phasecv 1k Ohms
+    float R8    = 1000; // phasecv 1k Ohms
     float R9    = 1000; // 1k Ohms
     float R10   = 1800;
     float C     = 100*10^(-9);    // 100nF
@@ -371,11 +655,13 @@ struct julia
     float zx = 1.2, zy = 0.8;
     float cx = 0.2, cy = 0.3;
 
+    float t = 0.1f;
+
     void iterate()
     {
-        float   xm = zx * zx - zy * zy;
-                zy = 2 * zx * zy  + cy ;
-                zx = xm + cx;
+        float   xm = t * (zx * zx - zy * zy);
+                zy = t * (2.0f * zx * zy  + cy) ;
+                zx = t * (xm + cx);
     }
 
 };

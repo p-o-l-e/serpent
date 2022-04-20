@@ -76,7 +76,6 @@ int main(int, char**)
             const int n_dd    = 3;
             const int n_envs  = 4;
 
-
             const char* mod_types[n_mods] = {   "Modulator:   Off",
                                                 "Modulator: ADSR1", 
                                                 "Modulator: ADSR2", 
@@ -107,30 +106,30 @@ int main(int, char**)
                                                 "Filter: BandPass   ", 
                                                 "Filter:    Notch   "};
 
-            const char* lfo_names[n_lfos] =   { "LFO:        Sine", 
-                                                "LFO:         Saw", 
-                                                "LFO:    Triangle",
-                                                "LFO:    Triangle",
-                                                "LFO:      Lorenz",
-                                                "LFO:       Ikeda",
-                                                "LFO:    Roessler"};
+            const char* lfo_names[n_lfos] =   { "LFO:     Sine", 
+                                                "LFO:      Saw", 
+                                                "LFO: Triangle",
+                                                "LFO: Triangle",
+                                                "LFO:   Lorenz",
+                                                "LFO:    Ikeda",
+                                                "LFO: Roessler"};
 
 
             const char* algorhithms[n_algs] = { "3n+1  Conjecture   ", 
                                                 "Lorenz Attractor   ", 
                                                 "Hofstaedter    Q   "};
 
-            const char* dd_names_l[n_dd]    = { "Left:      Delay",
-                                                "Left:     Reverb",
-                                                "Left:     Chorus"};
+            const char* dd_names_l[n_dd]    = { "Left:    Delay A",
+                                                "Left:    Delay B",
+                                                "Left:    Delay C"};
 
-            const char* dd_names_c[n_dd]    = { "Centre:    Delay",
-                                                "Centre:   Reverb",
-                                                "Centre:   Chorus"};
-
-            const char* dd_names_r[n_dd]    = { "Right:     Delay",
-                                                "Right:    Reverb",
-                                                "Right:    Chorus"};
+            const char* dd_names_c[n_dd]    = { "Centre:  Delay A",
+                                                "Centre:  Delay B",
+                                                "Centre:  Delay C"};
+ 
+            const char* dd_names_r[n_dd]    = { "Right:   Delay A",
+                                                "Right:   Delay B",
+                                                "Right:   Delay C"};
 
             const char* env_names[n_envs]   = { "Form:             Cubic",
                                                 "Form:      Linear (eco)",
@@ -928,7 +927,7 @@ int main(int, char**)
                         ImGui::BeginChild(3, ImVec2(60, 80), false);
    
                         if (ImGui::Button("SET", ImVec2(60,38))) mute.renderer->esq.set((get_scale(o.note_set, o.oct_set)));
-                        ImGui::Button("##SET", ImVec2(60,17));
+                        ImGui::Button("Sequence", ImVec2(60,17));
                         if(ImGui::Button("##BITSET", ImVec2(60,17)))
                         {
                             std::cout<<B<<"\n";
@@ -1286,7 +1285,7 @@ int main(int, char**)
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Child #2 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     ImGui::SameLine();
-                    ImGui::BeginChild(2, ImVec2(304, 462), false);
+                    ImGui::BeginChild(2, ImVec2(304, 460), false);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // ENVELOPES UPPER ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1311,7 +1310,9 @@ int main(int, char**)
                     float (*func_adsr1)(void*, int) = plot_f::plot_adsr1;
                     ImGui::PlotLines("##PlotADSR1", func_adsr1, NULL, o.env_imprint[0].size(), 0, NULL, 0.0f, 1.0f, ImVec2(172, 80));
                     ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.129, 0.215, 0.349, 1));
-
+                   
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Switches ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     ImGui::RadioButton("##SwitchEnv1", &o.radio_env_amp, 1); ImGui::SameLine();
                     ImGui::RadioButton("##SwitchEnv2", &o.radio_env_amp, 2); ImGui::SameLine();
                     ImGui::RadioButton("##SwitchEnv3", &o.radio_env_amp, 3);
@@ -1321,7 +1322,7 @@ int main(int, char**)
                     
                     if(o.env_slider_type[0]==0)
                     {
-                        ImGui::DragFloat("##EnvScale1", &o.scale_env[0], 0.1, 0.1, 100.0, "ADSR 1 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale1", &o.scale_env[0], 0.1, 1.0f, 100.0f, "ADSR 1 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[0]==1)
                     {
@@ -1383,7 +1384,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(195);
                     if(o.env_slider_type[1]==0)
                     {
-                        ImGui::DragFloat("##EnvScale2", &o.scale_env[1], 0.1, 0.1, 100.0, "ADSR 2 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale2", &o.scale_env[1], 0.1, 1.0f, 100.0f, "ADSR 2 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[1]==1)
                     {
@@ -1444,7 +1445,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(195);
                     if(o.env_slider_type[2]==0)
                     {
-                        ImGui::DragFloat("##EnvScale3", &o.scale_env[2], 0.1, 0.1, 100.0, "ADSR 3 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale3", &o.scale_env[2], 0.1, 1.0f, 100.0f, "ADSR 3 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[2]==1)
                     {
@@ -1477,8 +1478,8 @@ int main(int, char**)
                     }
 
 
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // ENVELOPES C & D & E ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // ENVELOPES Lower ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Envelope 4 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     
@@ -1507,7 +1508,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(216);
                     if(o.env_slider_type[3]==0)
                     {
-                        ImGui::DragFloat("##EnvScale4", &o.scale_env[3], 0.1, 0.1, 100.0, "ADSR 4 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale4", &o.scale_env[3], 0.1, 1.0f, 100.0f, "ADSR 4 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[3]==1)
                     {
@@ -1556,7 +1557,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(216);
                     if(o.env_slider_type[4]==0)
                     {
-                        ImGui::DragFloat("##EnvScale5", &o.scale_env[4], 0.1, 0.1, 100.0, "ADSR 5 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale5", &o.scale_env[4], 0.1, 1.0f, 100.0f, "ADSR 5 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[4]==1)
                     {
@@ -1605,7 +1606,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(216);
                     if(o.env_slider_type[5]==0)
                     {
-                        ImGui::DragFloat("##EnvScale6", &o.scale_env[5], 0.1, 0.1, 100.0, "ADSR 6 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale6", &o.scale_env[5], 0.1, 1.0f, 100.0f, "ADSR 6 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[5]==1)
                     {
@@ -1664,22 +1665,35 @@ int main(int, char**)
                     ImGui::NewLine();
                     ImGui::PushStyleColor(ImGuiCol_SliderGrab,ImVec4(0.14, 0.2, 0.28, 1));
 
+                    ImGui::PushItemWidth(106);
+                    ImGui::RadioButton("##SwitchEnv4", &o.radio_env_mod, 1); ImGui::SameLine();
+                    ImGui::RadioButton("##SwitchEnv5", &o.radio_env_mod, 2); ImGui::SameLine();
+                    if(ImGui::SliderInt("##TypeLfoA", &o.lfo_imprint_type[0], 0, n_lfos-1, lfo_name1))
+                    {
+                        o.lfo[0].form = o.lfo_imprint_type[0];
+                        o.lfo_imprint[0] = imprint(&o.lfo[0], 120, 1);
+                    }
+
+                    ImGui::SameLine();
+                    ImGui::PushItemWidth(106);
+                    ImGui::RadioButton("##SwitchEnv4", &o.radio_env_mod, 1); ImGui::SameLine();
+                    ImGui::RadioButton("##SwitchEnv5", &o.radio_env_mod, 2); ImGui::SameLine();
+                    if(ImGui::SliderInt("##TypeLfoB", &o.lfo_imprint_type[1], 0, n_lfos-1, lfo_name2))
+                    {
+                        o.lfo[1].form = o.lfo_imprint_type[1];
+                        o.lfo_imprint[1] = imprint(&o.lfo[1], 120, 1);
+                    }
+
+
                     if (ImGui::Button("##SwitchLfoA", ImVec2(17, 17)))
                     {
                         switch_lfo_a++;
-                        switch_lfo_a>2? switch_lfo_a=0: switch_lfo_a;
+                        switch_lfo_a>1? switch_lfo_a=0: switch_lfo_a;
                     }
                     ImGui::SameLine();
                     ImGui::PushItemWidth(127);
+
                     if(switch_lfo_a==0)
-                    {
-                        if(ImGui::SliderInt("##TypeLfoA", &o.lfo_imprint_type[0], 0, n_lfos-1, lfo_name1))
-                        {
-                            o.lfo[0].form = o.lfo_imprint_type[0];
-                            o.lfo_imprint[0] = imprint(&o.lfo[0], 120, 1);
-                        }
-                    }
-                    if(switch_lfo_a==1)
                     {
                         if(ImGui::SliderInt("##ModLfoA", &o.lfo_mod_type[0] ,0, n_mods-1, mod_name_lfo_a))
                         {
@@ -1687,7 +1701,7 @@ int main(int, char**)
                         }
 
                     }
-                    if(switch_lfo_a==2)
+                    if(switch_lfo_a==1)
                     {
                         if(ImGui::SliderFloat("##AmountLfoA", &o.lfo_mod_amount[0], 0.0f, 1.0f, "%.4f"))
                         {
@@ -1699,19 +1713,12 @@ int main(int, char**)
                     if (ImGui::Button("##SwitchLfoB", ImVec2(17, 17)))
                     {
                         switch_lfo_b++;
-                        switch_lfo_b>2? switch_lfo_b=0: switch_lfo_b;
+                        switch_lfo_b>1? switch_lfo_b=0: switch_lfo_b;
                     }
                     ImGui::SameLine();
                     ImGui::PushItemWidth(127);
+
                     if(switch_lfo_b==0)
-                    {
-                        if(ImGui::SliderInt("##TypeLfoB", &o.lfo_imprint_type[1], 0, n_lfos-1, lfo_name2))
-                        {
-                            o.lfo[1].form = o.lfo_imprint_type[1];
-                            o.lfo_imprint[1] = imprint(&o.lfo[1], 120, 1);
-                        }
-                    }
-                    if(switch_lfo_b==1)
                     {
                         if(ImGui::SliderInt("##ModLfoB", &o.lfo_mod_type[1] ,0, n_mods-1, mod_name_lfo_b))
                         {
@@ -1719,13 +1726,16 @@ int main(int, char**)
                         }
 
                     }
-                    if(switch_lfo_b==2)
+                    if(switch_lfo_b==1)
                     {
                         if(ImGui::SliderFloat("##AmountLfoB", &o.lfo_mod_amount[1], 0.0f, 1.0f, "%.4f"))
                         {
 
                         }
                     }
+
+                    
+
                     ImGui::PopStyleColor();
 
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1733,8 +1743,10 @@ int main(int, char**)
                     float (*func)(void*, int) = plot_f::plot_output;
                     ImGui::PlotLines("##plot_out", func, NULL, 2048, 0, NULL, -1.0f, 1.0f, ImVec2(300, 101));
                     
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    ImGui::BeginChild(7,ImVec2(300,40));
+                    
+                    ImGui::EndChild();
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    ImGui::BeginChild(7,ImVec2(600,40));
                     if (ImGui::Button("Play",ImVec2(38, 17))) mute.play();
                     ImGui::SameLine();
                     if (ImGui::Button("Stop",ImVec2(38, 17))) mute.stop();
@@ -1742,16 +1754,18 @@ int main(int, char**)
                     ImGui::ArrowButton("##PreviousPreset", ImGuiDir_Left);
                     ImGui::SameLine();
                     
-                    ImGui::PushItemWidth(173);
+                    ImGui::PushItemWidth(164);
                     ImGui::InputText("##PresetName", pset_name, IM_ARRAYSIZE(pset_name));
                     ImGui::PopItemWidth();
                     ImGui::SameLine();
                     ImGui::ArrowButton("##NextPreset", ImGuiDir_Right);
+                                        ImGui::SameLine();
+
                     ImGui::Button("i",ImVec2(17, 17));
                     ImGui::SameLine();
-                    ImGui::Button("settings",ImVec2(80, 17));
-                    ImGui::SameLine();
-                    if(ImGui::Button("load",ImVec2(95, 17)))
+                    // ImGui::Button("settings",ImVec2(80, 17));
+                    // ImGui::SameLine();
+                    if(ImGui::Button("Load",ImVec2(75, 17)))
                     {  
                         o.get_list();
                         ImGui::OpenPopup("Load preset");  
@@ -1824,14 +1838,12 @@ int main(int, char**)
                 
 
                     ImGui::SameLine();
-                    if(ImGui::Button("Save",ImVec2(95, 17)))
+                    if(ImGui::Button("Save",ImVec2(75, 17)))
                     {
                         o.name = pset_name;
                         o.save();
                     }
                     ImGui::EndChild();
-                    ImGui::EndChild();
-
 
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // MODULATION & FEEDBACK ////////////////////////////////////////////////////////////////////////////////////////////

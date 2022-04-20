@@ -92,8 +92,8 @@ void spawner::spawn(void)
             if(freerun[osc])
             {
                 set_modulation();
-                form[form_vco[osc]](&vco[osc][0]);
-                out[osc] += vco[osc][0].out;
+                form[form_vco[osc]](&vco[osc][free[osc]]);
+                out[osc] += vco[osc][free[osc]].out;
                 out[osc] = form_filter[form_vcf[osc]](&vcf[osc], out[osc]);
             }
             else
@@ -248,7 +248,7 @@ spawner::spawner(circular* buffer): data(buffer)
 
     freerun[0] = false;
     freerun[1] = false;
-    freerun[2] = true;
+    freerun[2] = false;
 
     for(int osc=0; osc<oscn; osc++)
     {

@@ -69,6 +69,7 @@ inline void reverb::init()
 inline float reverb::process(const float& in)
 {
     float out = in;
+    float R = 0.0f;
     theta = -1.0f;
     for(int i=0; i<W; i++) feed[i] = 0.0f;
 
@@ -84,7 +85,8 @@ inline float reverb::process(const float& in)
             theta+=phi; // All Pass angle increment
         }
         feed[y]*=e;
+        R += feed[y];
     }
 
-    return feed[0]+feed[1]+feed[2]+feed[3];
+    return R;
 }

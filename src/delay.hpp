@@ -25,6 +25,7 @@ class delay
         float*      tone;
         float       eax      = 0.0f;
         int         type;
+
         delay();
         delay(const int&);
         ~delay();
@@ -47,6 +48,14 @@ delay::~delay()
 {
     delete data;
 }
+
+
+
+
+
+
+
+
 
 float fDelay(delay* DD, const float& input)
 {
@@ -89,12 +98,14 @@ float fSDelay(delay* DD, const float& input)
 }
 
 
+float fADelay(delay* DD, const float& input)
+{
 
-float (*fDD[])(delay*, const float&) = {fDelay, fFDelay, fSDelay};
+}
 
 
+float (*fDD[])(delay*, const float&) = {fDelay, fFDelay, fSDelay, fADelay};
 
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif

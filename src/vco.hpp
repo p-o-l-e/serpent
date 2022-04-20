@@ -13,6 +13,7 @@
 #include "envelopes.hpp"
 #include "filters.hpp"
 #include "chaos.hpp"
+#include "fastmath.hpp"
 #include "utility.hpp"
 iospecs settings;
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -165,6 +166,7 @@ inline void fDuffing(VCO* o)     // *
 {
         static duffing d;
         d.y =  o->phase + (*o->phasecv-0.5f)*2;
+        //d.t = o->delta/10;
         d.a = *o->pwmcv*16.0f;
         d.iterate();
         o->out = (d.y*0.1f)**o->amplitude;
@@ -175,35 +177,146 @@ inline void fDuffing(VCO* o)     // *
 
 
 
+// inline void fFabrikant(VCO* o)     
+// {
+//         static rabinovich_fabrikant d;
+//         static dcb f;
+//         d.x =  o->phase;
+//         d.gamma = (0.979999f +*o->phasecv/50.0f);
+//         d.x *= (1+*o->pwmcv);
+//         //d.gamma = 0.999999;
+//         //d.alpha = (*o->pwmcv-0.5)*8;
+//         d.iterate();
+//         o->out = f.process((d.x+d.y+d.z)*0.002f**o->amplitude*(1.01-*o->pwmcv)*(1.2-*o->phasecv));
+
+//         o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
+//         if(o->phase >= M_PI) o->phase -= TAO;
+// }
+
 inline void fFabrikant(VCO* o)     
 {
         static rabinovich_fabrikant d;
-        static dcb f;
-        d.x =  o->phase;
-        d.gamma = (0.979999f +*o->phasecv/50.0f);
-        d.x *= (1+*o->pwmcv);
-        //d.gamma = 0.999999;
-        //d.alpha = (*o->pwmcv-0.5)*8;
+        
+        d.t = o->delta/10.0f;
+        //d.f = *o->phasecv*2;
+        //d.a = 10.0f + *o->phasecv*2;
         d.iterate();
-        o->out = f.process((d.x+d.y+d.z)*0.002f**o->amplitude*(1.01-*o->pwmcv)*(1.2-*o->phasecv));
+        
+        o->out = ( xfade(d.y, d.x, *o->pwmcv ))*2.0f**o->amplitude;
+        o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
+        if(o->phase >= M_PI) o->phase -= TAO;
+}
+
+
+// inline void fVanDerPol(VCO* o)//? Uncertainity
+// {
+//         static vanderpol d;
+//         d.y =  o->phase;
+//         //d.x = o->phase;
+
+//         d.mu = (*o->pwmcv-0.5f)*4.0f;
+//         //d.x  *= *o->phasecv*2;
+//         d.f  = (*o->phasecv-0.5f)*2.0f; 
+//         d.delta = o->delta;
+//         d.iterate();
+//         o->out = (d.y)*0.2f**o->amplitude;
+
+//         o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
+//         if(o->phase >= M_PI) o->phase -= TAO;
+// }
+
+inline void fSprottST(VCO* o)//? Uncertainity
+{
+        static sprott_st d;
+
+        d.t = o->delta/2.0f;
+        d.iterate();
+        
+        o->out = ( xfade(d.z, d.y, *o->pwmcv ))*1.0f**o->amplitude;
 
         o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
         if(o->phase >= M_PI) o->phase -= TAO;
 }
 
-inline void fVanDerPol(VCO* o)//? Uncertainity
+inline void fHelmholz(VCO* o)//? Uncertainity
+{
+        static helmholz d;
+
+        d.t = o->delta/2.0f;
+        d.iterate();
+        
+        o->out = ( xfade(d.y, d.x, *o->pwmcv ))*1.5f**o->amplitude;
+
+        o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
+        if(o->phase >= M_PI) o->phase -= TAO;
+}
+
+inline void fHalvorsen(VCO* o)//? Uncertainity
+{
+        static halvorsen d;
+
+        d.t = o->delta/30.0f;
+        d.iterate();
+        
+        o->out = ( xfade(d.y, d.z, *o->pwmcv ))*1.2f**o->amplitude;
+
+        o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
+        if(o->phase >= M_PI) o->phase -= TAO;
+}
+
+inline void fTSUCS(VCO* o)//? Uncertainity
+{
+        static tsucs d;
+
+        d.t = o->delta/40.0f;
+        d.iterate();
+        
+        o->out = ( xfade(d.y, d.z, *o->pwmcv ))*1.8f**o->amplitude;
+
+        o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
+        if(o->phase >= M_PI) o->phase -= TAO;
+}
+
+
+
+inline void fLinz(VCO* o)// OK
+{
+        static linz d;
+
+        d.t = o->delta;
+        d.a = 0.01f + *o->phasecv/2.0f;
+        d.iterate();
+        
+        o->out = ( xfade(d.y, d.z, *o->pwmcv ))*2.0f**o->amplitude;
+        o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
+        if(o->phase >= M_PI) o->phase -= TAO;
+
+}
+
+inline void fYuWang(VCO* o)// OK
+{
+        static yu_wang d;
+
+        d.t = o->delta/40;
+        d.a = 10.0f + *o->phasecv*2;
+        d.iterate();
+        
+        o->out = ( xfade(d.y, d.x, *o->pwmcv ))*2.0f**o->amplitude;
+        o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
+        if(o->phase >= M_PI) o->phase -= TAO;
+}
+
+
+inline void fVanDerPol(VCO* o)// OK
 {
         static vanderpol d;
-        d.y =  o->phase;
-        //d.x = o->phase;
 
-        d.mu = (*o->pwmcv-0.5f)*4.0f;
-        //d.x  *= *o->phasecv*2;
-        d.f  = (*o->phasecv-0.5f)*2.0f; 
-        d.delta = o->delta;
+        d.t = o->delta/3.0f;
+        d.f = *o->phasecv*2;
+        //d.a = 10.0f + *o->phasecv*2;
         d.iterate();
-        o->out = (d.y)*0.2f**o->amplitude;
-
+        
+        o->out = ( xfade(d.y, d.x, *o->pwmcv ))*2.0f**o->amplitude;
         o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
         if(o->phase >= M_PI) o->phase -= TAO;
 }

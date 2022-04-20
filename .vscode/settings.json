@@ -53,6 +53,7 @@
         "map": "cpp",
         "list": "cpp",
         "chrono": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "various": "cpp"
     }
 }
