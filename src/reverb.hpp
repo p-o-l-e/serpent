@@ -78,7 +78,7 @@ inline float reverb::process(const float& in)
         for(int x=0; x<W; x++)
         {
             f[x].a=theta; // All pass init
-            out=f[x].process(fDD[2](&d[x], in + feed[y]));
+            out=f[x].process(fDD[3](&d[x], in + feed[y]));
             out*=e;
             feed[y] += (out * H[x][y][y]);
 

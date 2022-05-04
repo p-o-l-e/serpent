@@ -18,19 +18,16 @@ struct chorus
 
 float chorus::process(const float& in)
 {
-    lfo.delta = rate*4;
-    
+    lfo.delta = rate / 20.0f + 0.001f;
     form_lfo[form](&lfo);
-    out = fDD[0](&dd, in)*level;
+    out = fDD[3](&dd, in) *level;
     return out;
 }
 
+
 chorus::chorus()
 {
-    dd.feedback = 0.2;
-    dd.amount = 0.4;
-    
-    lfo.morph = &morph;
-    lfo.amplitude = &depth;
-    dd.time = &lfo.out;
+    lfo.morph       = &morph;
+    lfo.amplitude   = &depth;
+    dd.time         = &lfo.out;
 }

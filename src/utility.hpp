@@ -67,6 +67,31 @@ struct onepole // One pole LP parameter smooth filter
         }
 };
 
+// Q: 1.4142 to ~ 0.1  Cutoff: 0.0 - 1.0 
+// Base on code by Patrice Tarrabia https://www.musicdsp.org/en/latest/Filters/38-lp-and-hp-filter.html
+struct hp 
+{
+    private:
+        float eax = 0.0f;
+        float ebx = 0.0f;
+    public:
+        float cutoff = 0.7f;
+        float Q      = 1.4f;
+
+
+    float process(float in)
+    {
+        float c = (cutoff + Q) * cutoff;
+        float out = ((1.0/(1.0+c))*eax+in-ebx)*(1.0-c);
+        eax = out;
+        ebx = in;
+        return out;
+    }
+};
+
+
+
+
 
 struct envelope_follower
 {

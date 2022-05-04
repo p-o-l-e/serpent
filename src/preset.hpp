@@ -8,6 +8,7 @@
 #include <iostream>
 #include <filesystem>
 #include <sstream>
+#include <string>
 #include "spawner.hpp"
 
 #define envn 6
@@ -17,9 +18,10 @@
 class preset
 {
     public:
-        std::fstream ff;
-        std::stringstream ss;
+        std::fstream        ff;
+        std::stringstream   ss;
         const std::filesystem::path presets{"presets"};
+        std::string version = "0.4.6";
 
         float   volume  = 0.05;
         float   tempo   = 0.1f, 
@@ -104,6 +106,7 @@ class preset
         vector<string>  preset_list;
         string name;
         size_t preset_count;
+
         void save(const string&);
         void save();
         void load();
@@ -130,7 +133,9 @@ void preset::get_list()
 void preset::save()
 {
     ff.open(path_prefix+name, std::ios_base::out);
-    
+    //ff<<"<SerpentPreset version = "<<version<<">\n"; // Xml root 
+
+
     ff<<volume<<"\n";
     for(int i=0; i<oscn; i++) ff<<form_vco[i]<<"\n";
 
@@ -201,6 +206,8 @@ void preset::save()
     ff<<if_square_b<<"\n";
                
 
+
+    //ff<<"</SerpentPreset>\n"; // XML root
     ff.close();
 }
 

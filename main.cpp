@@ -76,6 +76,7 @@ int main(int, char**)
             const int n_dd    = 3;
             const int n_envs  = 4;
 
+
             const char* mod_types[n_mods] = {   "Modulator:   Off",
                                                 "Modulator: ADSR1", 
                                                 "Modulator: ADSR2", 
@@ -1030,7 +1031,6 @@ int main(int, char**)
                     o.rhythm[2]= (o.beat&0x0000FF00)>>8;
                     o.rhythm[3]= (o.beat&0x000000FF);
                 }        
-                ImGui::EndChild();
 
                 ImGui::SameLine();
 
@@ -1207,7 +1207,8 @@ int main(int, char**)
                             if (o.delay_slider_type[0]>2) o.delay_slider_type[0] = 0;
                         }
                     }
-                    
+
+ 
                     if(current_src==1)
                     {
                         ImGui::PushItemWidth(-1);
