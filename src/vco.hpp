@@ -57,8 +57,8 @@ VCO::VCO()
         delta       = 0.0f;  
         nharm       = 11;          
         on          = false;
-        cax = 0xFFFFFFFF;
-        cbx = 0xAAAAAAAA;
+        cax         = 0xFFFFFFFF;
+        cbx         = 0xAAAAAAAA;
 }
 
 inline void fSine(VCO* o)
@@ -347,54 +347,3 @@ void (*form[])(VCO*) = {    fSine ,             // 0
 
 #endif /////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
-
-// inline void fSquare(VCO* o) // Odd harmonics pulse
-// {
-//         float pw = (*o->pwmcv*1.9f+0.05f)*M_PI;
-//         float ax = 0, bx = 0;
-//         for(int i = 1; i<= o->nharm*2+1; i+=2)
-//         {
-//                 ax+=sinf(o->phase*i)/i;
-//                 bx+=sinf((o->phase+pw)*i)/i;
-//         }
-//         o->out = (ax-bx)**o->amplitude*o->ampcv;
-//         o->phase += o->delta;
-//         if(o->phase >= TAO) o->phase -= TAO;
-// }
-
-// inline void fVanDerPol(VCO* o)     
-// {
-//         o->out = (*o->pwmcv-0.55f)*2.0f *(1.0f - o->phase*o->phase)*o->eax - o->phase;
-//         o->out *= *o->amplitude;
-//         o->out /= TAO;
-//         o->eax = o->out;
-//         o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
-//         if(o->phase >= M_PI) o->phase -= TAO;
-// }
-
-
-// roessler rs;
-// inline void fVanDerPol(VCO* o)     
-// {
-//         rs.a = *o->pwmcv + 0.2; // +0.17
-//         rs.b = *o->phasecv + 0.2; // + 10.2 (increasing upper bound of mA)
-//         rs.delta = o->delta;
-//         rs.iterate();
-//         o->out = rs.x*0.1;
-// }
-
-// vanderpol vdp;
-
-// inline void fVanDerPol(VCO* o)     
-// {
-//         vdp.delta = o->delta;
-//         vdp.x = o->phase;
-        
-//         vdp.mu = *o->pwmcv*4;
-//         vdp();
-//         o->out = (vdp.y) *0.001;
-//         //o->out = vdp.x;
-
-//         o->phase += o->delta + (*o->fcv-0.5f)*o->pshift*2.0f;
-//         if(o->phase >= M_PI) o->phase -= TAO;
-// }

@@ -59,7 +59,7 @@ class spawner
         float  seed_step[2];                        // with given seed
         int    flags[2];                            // Change flags: [0]: Change speed
         uint   bpm;
-        uint   pattern;
+        //uint   pattern;
         friend class feeder;
         inline void spawn(void);
         inline void init(void);
@@ -173,7 +173,7 @@ void spawner::trigger()
             }
             if(flags[0])
             {
-                esq.pattern = pattern;
+                //esq.pattern = pattern;
                 esq.timeset(bpm);
                 flags[0] = 0;
             }

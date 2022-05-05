@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
-#include <bitset>
 #include <stdio.h>
 #include <utility>
 
@@ -39,7 +38,8 @@ int main(int, char**)
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI| SDL_WINDOW_BORDERLESS);
     SDL_Window* window = SDL_CreateWindow("fFFF", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 788, 510, window_flags);
 
-    if (SDL_SetWindowHitTest(window, hitTest, NULL) == -1) {
+    if (SDL_SetWindowHitTest(window, hitTest, NULL) == -1) 
+    {
         SDL_Log("Enabling hit-testing failed!\n");
         SDL_Quit();
         return 1;
@@ -65,7 +65,7 @@ int main(int, char**)
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // SETUP ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            static std::bitset<32> B;
+            //static std::bitset<32> B;
             static float* scope = mute.data->get();
 
             const int n_mods  = 10;
@@ -172,7 +172,7 @@ int main(int, char**)
             o.lfo[1].amplitude = mute.renderer->lfo[1].amplitude;
         
 
-            mute.renderer->pattern = o.beat;
+            //mute.renderer->pattern = o.beat;
             mute.renderer->esq.pattern = o.beat;
             mute.renderer->esq.timeset(int(o.tempo*10000));
             
@@ -323,7 +323,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountAmpA", &o.amp_mod_amount[0], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###SwitchAmpA", ImVec2(17,17)) ) { o.amp_slider_type[0]++; o.amp_slider_type[0]>2? o.amp_slider_type[0]=0 : o.amp_slider_type[0]; }
+                    if( ImGui::Button("###SwitchAmpA", ImVec2(17,17)) ) 
+                    { 
+                        o.amp_slider_type[0]++; 
+                        o.amp_slider_type[0]>2? o.amp_slider_type[0]=0 : o.amp_slider_type[0]; 
+                    }
                    
                    
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -343,7 +347,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountDetuneA", &o.detune_mod_amount[0], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###SwitchDetuneA", ImVec2(17,17)) ) { o.detune_slider_type[0]++; o.detune_slider_type[0]>2? o.detune_slider_type[0]=0 : o.detune_slider_type[0]; }
+                    if( ImGui::Button("###SwitchDetuneA", ImVec2(17,17)) ) 
+                    { 
+                        o.detune_slider_type[0]++; 
+                        o.detune_slider_type[0]>2? o.detune_slider_type[0]=0 : o.detune_slider_type[0]; 
+                    }
                     
                     
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -364,7 +372,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPanA", &o.pan_mod_amount[0], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###SwitchPanA", ImVec2(17,17)) ) { o.pan_slider_type[0]++; o.pan_slider_type[0]>2? o.pan_slider_type[0]=0 : o.pan_slider_type[0]; }
+                    if( ImGui::Button("###SwitchPanA", ImVec2(17,17)) ) 
+                    { 
+                        o.pan_slider_type[0]++; 
+                        o.pan_slider_type[0]>2? o.pan_slider_type[0]=0 : o.pan_slider_type[0]; 
+                    }
 
 
                     ImGui::PushItemWidth(-1);
@@ -396,7 +408,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPhaseA", &o.phase_mod_amount[0], 0.0f, 1.00f,"Amount:   %.4f",ImGuiSliderFlags_Logarithmic);    
                         ImGui::SameLine();
                     }
-                    if( ImGui::Button("###SwitchPhaseA", ImVec2(17,17)) ) { o.phase_slider_type[0]++; o.phase_slider_type[0]>2? o.phase_slider_type[0]=0 : o.phase_slider_type[0]; }
+                    if( ImGui::Button("###SwitchPhaseA", ImVec2(17,17)) ) 
+                    { 
+                        o.phase_slider_type[0]++; 
+                        o.phase_slider_type[0]>2? o.phase_slider_type[0]=0 : o.phase_slider_type[0]; 
+                    }
 
 
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,7 +439,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPwmA", &o.pwm_mod_amount[0], 0.0f, 1.00f,"Amount:   %.4f",ImGuiSliderFlags_Logarithmic);
                         ImGui::SameLine();
                     }
-                    if( ImGui::Button("###SwitchPwmA", ImVec2(17,17)) ) { o.pwm_slider_type[0]++; o.pwm_slider_type[0]>2? o.pwm_slider_type[0]=0 : o.pwm_slider_type[0]; }
+                    if( ImGui::Button("###SwitchPwmA", ImVec2(17,17)) ) 
+                    { 
+                        o.pwm_slider_type[0]++; 
+                        o.pwm_slider_type[0]>2? o.pwm_slider_type[0]=0 : o.pwm_slider_type[0]; 
+                    }
                     ImGui::EndDisabled();
                     
                     
@@ -501,7 +521,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountAmpB", &o.amp_mod_amount[1], 0.0f, 1.00f,"Amount:   %.4f",ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###AmpSwitchB",ImVec2(17,17)) ) { o.amp_slider_type[1]++; o.amp_slider_type[1]>2? o.amp_slider_type[1]=0 : o.amp_slider_type[1]; }
+                    if( ImGui::Button("###AmpSwitchB",ImVec2(17,17)) ) 
+                    { 
+                        o.amp_slider_type[1]++; 
+                        o.amp_slider_type[1]>2? o.amp_slider_type[1]=0 : o.amp_slider_type[1]; 
+                    }
                     
                     
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -521,7 +545,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountDetuneB", &o.detune_mod_amount[1], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###SwitchDetuneB", ImVec2(17,17)) ) { o.detune_slider_type[1]++; o.detune_slider_type[1]>2? o.detune_slider_type[1]=0 : o.detune_slider_type[1]; }
+                    if( ImGui::Button("###SwitchDetuneB", ImVec2(17,17)) ) 
+                    { 
+                        o.detune_slider_type[1]++; 
+                        o.detune_slider_type[1]>2? o.detune_slider_type[1]=0 : o.detune_slider_type[1]; 
+                    }
                   
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // PAN B //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -541,7 +569,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPanB", &o.pan_mod_amount[1], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###SwitchPanB", ImVec2(17,17)) ) { o.pan_slider_type[1]++; o.pan_slider_type[1]>2? o.pan_slider_type[1]=0 : o.pan_slider_type[1]; }
+                    if( ImGui::Button("###SwitchPanB", ImVec2(17,17)) ) 
+                    { 
+                        o.pan_slider_type[1]++; 
+                        o.pan_slider_type[1]>2? o.pan_slider_type[1]=0 : o.pan_slider_type[1]; 
+                    }
 
 
                     ImGui::PushItemWidth(-1);
@@ -573,7 +605,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPhaseB", &o.phase_mod_amount[1], 0.0f, 1.00f, "Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                         ImGui::SameLine();
                     }
-                    if( ImGui::Button("###SwitchPhaseB", ImVec2(17,17)) ) { o.phase_slider_type[1]++; o.phase_slider_type[1]>2? o.phase_slider_type[1]=0 : o.phase_slider_type[1]; }                 
+                    if( ImGui::Button("###SwitchPhaseB", ImVec2(17,17)) ) 
+                    { 
+                        o.phase_slider_type[1]++; 
+                        o.phase_slider_type[1]>2? o.phase_slider_type[1]=0 : o.phase_slider_type[1]; 
+                    }                 
                     
                     
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -600,7 +636,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPwmB", &o.pwm_mod_amount[1], 0.0f, 1.00f, "Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                         ImGui::SameLine();
                     }
-                    if( ImGui::Button("###SwitchPwmB", ImVec2(17,17)) ) { o.pwm_slider_type[1]++; o.pwm_slider_type[1]>2? o.pwm_slider_type[1]=0 : o.pwm_slider_type[1]; }                 
+                    if( ImGui::Button("###SwitchPwmB", ImVec2(17,17)) ) 
+                    { 
+                        o.pwm_slider_type[1]++; 
+                        o.pwm_slider_type[1]>2? o.pwm_slider_type[1]=0 : o.pwm_slider_type[1]; 
+                    }                 
                     ImGui::EndDisabled();
                     
                     
@@ -632,7 +672,11 @@ int main(int, char**)
                         default: break;
                     }
                     ImGui::SameLine();
-                    if(ImGui::Button("###CuttoffSwitchB", ImVec2(17,17))) { o.cuttoff_slider_type[1]++; o.cuttoff_slider_type[1]>2? o.cuttoff_slider_type[1]=0: o.cuttoff_slider_type[1]; }
+                    if(ImGui::Button("###CuttoffSwitchB", ImVec2(17,17))) 
+                    { 
+                        o.cuttoff_slider_type[1]++; 
+                        o.cuttoff_slider_type[1]>2? o.cuttoff_slider_type[1]=0: o.cuttoff_slider_type[1]; 
+                    }
                     
                     
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -676,7 +720,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountAmpC", &o.amp_mod_amount[2], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###SwitchAmpC", ImVec2(17,17)) ) { o.amp_slider_type[2]++; o.amp_slider_type[2]>2? o.amp_slider_type[2]=0 : o.amp_slider_type[2]; }
+                    if( ImGui::Button("###SwitchAmpC", ImVec2(17,17)) ) 
+                    { 
+                        o.amp_slider_type[2]++; 
+                        o.amp_slider_type[2]>2? o.amp_slider_type[2]=0 : o.amp_slider_type[2]; 
+                    }
                     
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Detune C ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -695,7 +743,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountDetuneC", &o.detune_mod_amount[2], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###SwitchDetuneC", ImVec2(17,17)) ) { o.detune_slider_type[2]++; o.detune_slider_type[2]>2? o.detune_slider_type[2]=0 : o.detune_slider_type[2]; }
+                    if( ImGui::Button("###SwitchDetuneC", ImVec2(17,17)) ) 
+                    { 
+                        o.detune_slider_type[2]++; 
+                        o.detune_slider_type[2]>2? o.detune_slider_type[2]=0 : o.detune_slider_type[2]; 
+                    }
                   
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // PAN C //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -715,7 +767,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPanC", &o.pan_mod_amount[2], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                     }
                     ImGui::SameLine();
-                    if( ImGui::Button("###SwitchPanC", ImVec2(17,17)) ) { o.pan_slider_type[2]++; o.pan_slider_type[2]>2? o.pan_slider_type[2]=0 : o.pan_slider_type[2]; }
+                    if( ImGui::Button("###SwitchPanC", ImVec2(17,17)) ) 
+                    { 
+                        o.pan_slider_type[2]++; 
+                        o.pan_slider_type[2]>2? o.pan_slider_type[2]=0 : o.pan_slider_type[2]; 
+                    }
 
              
                     ImGui::PushItemWidth(-1);
@@ -747,7 +803,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPhaseC", &o.phase_mod_amount[2], 0.0f, 1.00f,"Amount:   %.4f",ImGuiSliderFlags_Logarithmic);
                         ImGui::SameLine();
                     }
-                    if( ImGui::Button("###SwitchPhaseC", ImVec2(17,17)) ) { o.phase_slider_type[2]++; o.phase_slider_type[2]>2? o.phase_slider_type[2]=0 : o.phase_slider_type[2]; }
+                    if( ImGui::Button("###SwitchPhaseC", ImVec2(17,17)) ) 
+                    { 
+                        o.phase_slider_type[2]++; 
+                        o.phase_slider_type[2]>2? o.phase_slider_type[2]=0 : o.phase_slider_type[2]; 
+                    }
                     
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // PWM C ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -773,7 +833,11 @@ int main(int, char**)
                         ImGui::SliderFloat("##ModAmountPwmC", &o.pwm_mod_amount[2], 0.0f, 1.00f,"Amount:   %.4f", ImGuiSliderFlags_Logarithmic);
                         ImGui::SameLine();
                     }
-                    if( ImGui::Button("###SwitchPwmC", ImVec2(17,17)) ) { o.pwm_slider_type[2]++; o.pwm_slider_type[2]>2? o.pwm_slider_type[2]=0 : o.pwm_slider_type[2]; }
+                    if( ImGui::Button("###SwitchPwmC", ImVec2(17,17)) ) 
+                    { 
+                        o.pwm_slider_type[2]++; 
+                        o.pwm_slider_type[2]>2? o.pwm_slider_type[2]=0 : o.pwm_slider_type[2]; 
+                    }
                     ImGui::EndDisabled();
                     
                     
@@ -806,7 +870,11 @@ int main(int, char**)
                         default: break;
                     }
                     ImGui::SameLine();
-                    if(ImGui::Button("###CutoffSwitchC", ImVec2(17,17))) { o.cuttoff_slider_type[2]++; o.cuttoff_slider_type[2]>2? o.cuttoff_slider_type[2]=0: o.cuttoff_slider_type[2]; }
+                    if(ImGui::Button("###CutoffSwitchC", ImVec2(17,17))) 
+                    { 
+                        o.cuttoff_slider_type[2]++; 
+                        o.cuttoff_slider_type[2]>2? o.cuttoff_slider_type[2]=0: o.cuttoff_slider_type[2]; 
+                    }
                     
                     
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -921,7 +989,11 @@ int main(int, char**)
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     for(int i=0; i<nn; i++)
                     {
-                        if(ImGui::VSliderInt(oct[i], ImVec2(17, 80), &o.oct[i], 1, 8, ""))  {o.oct_set[i]  = o.oct[i]; }  ImGui::SameLine();
+                        if(ImGui::VSliderInt(oct[i], ImVec2(17, 80), &o.oct[i], 1, 8, ""))  
+                        {
+                            o.oct_set[i]  = o.oct[i]; 
+                        }  
+                        ImGui::SameLine();
                     }  
 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -931,7 +1003,7 @@ int main(int, char**)
                         ImGui::Button("Sequence", ImVec2(60,17));
                         if(ImGui::Button("##BITSET", ImVec2(60,17)))
                         {
-                            std::cout<<B<<"\n";
+                            //std::cout<<B<<"\n";
                         }
                         ImGui::EndChild();
 
@@ -940,7 +1012,12 @@ int main(int, char**)
 
                         for(int i=0; i<nn; i++)
                         {
-                            if(ImGui::Checkbox(nsw[i], &o.note[i]))   {if((o.note[0]+o.note[1]+o.note[2]+o.note[3]+o.note[4]+o.note[5]+o.note[6]+o.note[7]+o.note[8]+o.note[9]+o.note[10]+o.note[11])==0) o.note[i]  = true;  o.note_set[i]  = o.note[i];  }   ImGui::SameLine();
+                            if(ImGui::Checkbox(nsw[i], &o.note[i]))   
+                            {
+                                if((o.note[0]+o.note[1]+o.note[2]+o.note[3]+o.note[4]+o.note[5]+o.note[6]+o.note[7]+o.note[8]+o.note[9]+o.note[10]+o.note[11])==0) o.note[i]  = true;  
+                                o.note_set[i]  = o.note[i];  
+                            }   
+                            ImGui::SameLine();
                         }
 
                         ImGui::SameLine();
@@ -1000,7 +1077,7 @@ int main(int, char**)
 
                         if(mute.renderer->esq.pattern!=o.beat)
                         {
-                            mute.renderer->pattern = mute.renderer->esq.pattern;
+                            //mute.renderer->pattern = mute.renderer->esq.pattern;
                             o.beat = mute.renderer->esq.pattern;
                         }
                         if(rhythm_change)
@@ -1009,19 +1086,20 @@ int main(int, char**)
                             o.beat+=o.rhythm[1]; o.beat<<=8;
                             o.beat+=o.rhythm[2]; o.beat<<=8;
                             o.beat+=o.rhythm[3]; 
-                            //if(o.beat<3) o.beat=3;
-                            mute.renderer->pattern = o.beat;
+
+                            mute.renderer->esq.pattern=o.beat;
                             mute.renderer->flags[0] = true;
                         }
-                        B = o.beat;
-            
+                       
+
+
                 rset = int_to_vector(o.beat);
-                draw_sequencer(rset,12,12,0xA86551FF);
+                draw_sequencer(rset, 12, 12, 0xA86551FF);
 
                 uint newset = vector_to_int(rset);
                 if(o.beat != newset)
                 {
-                    mute.renderer->pattern = newset;
+                    mute.renderer->esq.pattern = newset;
                     mute.renderer->flags[0] = 1;
 
                     o.beat=newset;
@@ -1034,15 +1112,15 @@ int main(int, char**)
 
                 ImGui::SameLine();
 
-                ImGui::BeginChild(606,ImVec2(120,60), false);
+                ImGui::BeginChild(606, ImVec2(120, 60), false);
                 ImGui::PushItemWidth(119);
-                ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.129, 0.215, 0.349,1));
+                ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.129, 0.215, 0.349, 1));
                 ImGui::PushStyleColor(ImGuiCol_SliderGrab, IM_COL32(33, 55, 89, 255));
 
                 ImGui::SliderFloat("##BeatSeed", &mute.renderer->esq.seed[1], 0.0f, 1.0f, "Seed: %.4f" );
                 ImGui::SliderFloat("##BeatStep", &mute.renderer->seed_step[1], 0.0f, 1.0f, "Step: %.4f" );
 
-                ImGui::BeginChild(909, ImVec2(38,18));
+                ImGui::BeginChild(909, ImVec2(38, 18));
                 if(mute.renderer->regenerate[1] == 1)
                 {
                     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(61, 133, 224, 255));
@@ -1296,10 +1374,10 @@ int main(int, char**)
                     if(o.radio_env_amp==1)
                     {
 
-                        ImGui::VSliderFloat("##AT1", ImVec2(12, 80), &o.env[0].adsr.A.time, 100.0f,  10000.0f*o.scale_env[0], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##DT1", ImVec2(12, 80), &o.env[0].adsr.D.time, 1000.0f, 10000.0f*o.scale_env[0], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##ST1", ImVec2(12, 80), &o.env[0].adsr.S.time, 1000.0f, 10000.0f*o.scale_env[0], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##RT1", ImVec2(12, 80), &o.env[0].adsr.R.time, 1000.0f, 10000.0f*o.scale_env[0], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##AT1", ImVec2(12, 80), &o.env[0].adsr.A.time, 100.0f,  10000.0f*o.env_scale[0], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##DT1", ImVec2(12, 80), &o.env[0].adsr.D.time, 1000.0f, 10000.0f*o.env_scale[0], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##ST1", ImVec2(12, 80), &o.env[0].adsr.S.time, 1000.0f, 10000.0f*o.env_scale[0], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##RT1", ImVec2(12, 80), &o.env[0].adsr.R.time, 1000.0f, 10000.0f*o.env_scale[0], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
                     ImGui::PushStyleColor(ImGuiCol_SliderGrab, 0xB45050FF);
                         ImGui::VSliderFloat("##AV1", ImVec2(12, 80), &o.env[0].adsr.A.value, 0.00001f, 1.0f, ""); ImGui::SameLine(); 
                         ImGui::VSliderFloat("##DV1", ImVec2(12, 80), &o.env[0].adsr.D.value, 0.00001f, 1.0f, ""); ImGui::SameLine();
@@ -1323,7 +1401,7 @@ int main(int, char**)
                     
                     if(o.env_slider_type[0]==0)
                     {
-                        ImGui::DragFloat("##EnvScale1", &o.scale_env[0], 0.1, 1.0f, 100.0f, "ADSR 1 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale1", &o.env_scale[0], 0.1, 1.0f, 100.0f, "ADSR 1 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[0]==1)
                     {
@@ -1360,10 +1438,10 @@ int main(int, char**)
                     // Envelope 2 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     else if(o.radio_env_amp==2)
                     {
-                        ImGui::VSliderFloat("##AT2", ImVec2(12, 80), &o.env[1].adsr.A.time, 100.0f,  10000.0f*o.scale_env[1], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##DT2", ImVec2(12, 80), &o.env[1].adsr.D.time, 1000.0f, 10000.0f*o.scale_env[1], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##ST2", ImVec2(12, 80), &o.env[1].adsr.S.time, 1000.0f, 10000.0f*o.scale_env[1], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##RT2", ImVec2(12, 80), &o.env[1].adsr.R.time, 1000.0f, 10000.0f*o.scale_env[1], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##AT2", ImVec2(12, 80), &o.env[1].adsr.A.time, 100.0f,  10000.0f*o.env_scale[1], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##DT2", ImVec2(12, 80), &o.env[1].adsr.D.time, 1000.0f, 10000.0f*o.env_scale[1], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##ST2", ImVec2(12, 80), &o.env[1].adsr.S.time, 1000.0f, 10000.0f*o.env_scale[1], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##RT2", ImVec2(12, 80), &o.env[1].adsr.R.time, 1000.0f, 10000.0f*o.env_scale[1], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
                     ImGui::PushStyleColor(ImGuiCol_SliderGrab, 0xB45050FF);
                         ImGui::VSliderFloat("##AV2", ImVec2(12, 80), &o.env[1].adsr.A.value, 0.00001f, 1.0f, "");ImGui::SameLine(); 
                         ImGui::VSliderFloat("##DV2", ImVec2(12, 80), &o.env[1].adsr.D.value, 0.00001f, 1.0f, "");ImGui::SameLine();
@@ -1385,7 +1463,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(195);
                     if(o.env_slider_type[1]==0)
                     {
-                        ImGui::DragFloat("##EnvScale2", &o.scale_env[1], 0.1, 1.0f, 100.0f, "ADSR 2 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale2", &o.env_scale[1], 0.1, 1.0f, 100.0f, "ADSR 2 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[1]==1)
                     {
@@ -1421,10 +1499,10 @@ int main(int, char**)
                     // Envelope 3 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     else if(o.radio_env_amp==3)
                     {
-                        ImGui::VSliderFloat("##AT3", ImVec2(12, 80), &o.env[2].adsr.A.time, 100.0f,  10000.0f*o.scale_env[2], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##DT3", ImVec2(12, 80), &o.env[2].adsr.D.time, 1000.0f, 10000.0f*o.scale_env[2], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##ST3", ImVec2(12, 80), &o.env[2].adsr.S.time, 1000.0f, 10000.0f*o.scale_env[2], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##RT3", ImVec2(12, 80), &o.env[2].adsr.R.time, 1000.0f, 10000.0f*o.scale_env[2], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##AT3", ImVec2(12, 80), &o.env[2].adsr.A.time, 100.0f,  10000.0f*o.env_scale[2], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##DT3", ImVec2(12, 80), &o.env[2].adsr.D.time, 1000.0f, 10000.0f*o.env_scale[2], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##ST3", ImVec2(12, 80), &o.env[2].adsr.S.time, 1000.0f, 10000.0f*o.env_scale[2], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##RT3", ImVec2(12, 80), &o.env[2].adsr.R.time, 1000.0f, 10000.0f*o.env_scale[2], "",ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
                     ImGui::PushStyleColor(ImGuiCol_SliderGrab, 0xB45050FF);
                         ImGui::VSliderFloat("##AV3", ImVec2(12, 80), &o.env[2].adsr.A.value, 0.00001f, 1.0f, ""); ImGui::SameLine(); 
                         ImGui::VSliderFloat("##DV3", ImVec2(12, 80), &o.env[2].adsr.D.value, 0.00001f, 1.0f, ""); ImGui::SameLine();
@@ -1446,7 +1524,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(195);
                     if(o.env_slider_type[2]==0)
                     {
-                        ImGui::DragFloat("##EnvScale3", &o.scale_env[2], 0.1, 1.0f, 100.0f, "ADSR 3 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale3", &o.env_scale[2], 0.1, 1.0f, 100.0f, "ADSR 3 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[2]==1)
                     {
@@ -1486,10 +1564,10 @@ int main(int, char**)
                     
                     if(o.radio_env_mod==1)
                     {
-                        ImGui::VSliderFloat("##AT4", ImVec2(12, 80), &o.env[3].adsr.A.time, 100.0f,  10000.0f*o.scale_env[3], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##DT4", ImVec2(12, 80), &o.env[3].adsr.D.time, 1000.0f, 10000.0f*o.scale_env[3], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##ST4", ImVec2(12, 80), &o.env[3].adsr.S.time, 1000.0f, 10000.0f*o.scale_env[3], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##RT4", ImVec2(12, 80), &o.env[3].adsr.R.time, 1000.0f, 10000.0f*o.scale_env[3], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##AT4", ImVec2(12, 80), &o.env[3].adsr.A.time, 100.0f,  10000.0f*o.env_scale[3], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##DT4", ImVec2(12, 80), &o.env[3].adsr.D.time, 1000.0f, 10000.0f*o.env_scale[3], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##ST4", ImVec2(12, 80), &o.env[3].adsr.S.time, 1000.0f, 10000.0f*o.env_scale[3], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##RT4", ImVec2(12, 80), &o.env[3].adsr.R.time, 1000.0f, 10000.0f*o.env_scale[3], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
                     ImGui::PushStyleColor(ImGuiCol_SliderGrab, 0xB45050FF);
                         ImGui::VSliderFloat("##AV4", ImVec2(12, 80), &o.env[3].adsr.A.value, 0.00001f, 1.0f, ""); ImGui::SameLine(); 
                         ImGui::VSliderFloat("##DV4", ImVec2(12, 80), &o.env[3].adsr.D.value, 0.00001f, 1.0f, ""); ImGui::SameLine();
@@ -1509,7 +1587,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(216);
                     if(o.env_slider_type[3]==0)
                     {
-                        ImGui::DragFloat("##EnvScale4", &o.scale_env[3], 0.1, 1.0f, 100.0f, "ADSR 4 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale4", &o.env_scale[3], 0.1, 1.0f, 100.0f, "ADSR 4 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[3]==1)
                     {
@@ -1535,10 +1613,10 @@ int main(int, char**)
                     // Envelope 5 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////                    else if(o.radio_env_mod==2)
                     else if(o.radio_env_mod==2)
                     {
-                        ImGui::VSliderFloat("##AT5", ImVec2(12, 80), &o.env[4].adsr.A.time, 100.0f,  10000.0f*o.scale_env[4], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##DT5", ImVec2(12, 80), &o.env[4].adsr.D.time, 1000.0f, 10000.0f*o.scale_env[4], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##ST5", ImVec2(12, 80), &o.env[4].adsr.S.time, 1000.0f, 10000.0f*o.scale_env[4], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##RT5", ImVec2(12, 80), &o.env[4].adsr.R.time, 1000.0f, 10000.0f*o.scale_env[4], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##AT5", ImVec2(12, 80), &o.env[4].adsr.A.time, 100.0f,  10000.0f*o.env_scale[4], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##DT5", ImVec2(12, 80), &o.env[4].adsr.D.time, 1000.0f, 10000.0f*o.env_scale[4], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##ST5", ImVec2(12, 80), &o.env[4].adsr.S.time, 1000.0f, 10000.0f*o.env_scale[4], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##RT5", ImVec2(12, 80), &o.env[4].adsr.R.time, 1000.0f, 10000.0f*o.env_scale[4], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
                     ImGui::PushStyleColor(ImGuiCol_SliderGrab, IM_COL32(180, 80, 80, 255));
                         ImGui::VSliderFloat("##AV5", ImVec2(12, 80), &o.env[4].adsr.A.value, 0.00001f, 1.0f, ""); ImGui::SameLine(); 
                         ImGui::VSliderFloat("##DV5", ImVec2(12, 80), &o.env[4].adsr.D.value, 0.00001f, 1.0f, ""); ImGui::SameLine();
@@ -1558,7 +1636,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(216);
                     if(o.env_slider_type[4]==0)
                     {
-                        ImGui::DragFloat("##EnvScale5", &o.scale_env[4], 0.1, 1.0f, 100.0f, "ADSR 5 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale5", &o.env_scale[4], 0.1, 1.0f, 100.0f, "ADSR 5 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[4]==1)
                     {
@@ -1584,10 +1662,10 @@ int main(int, char**)
                     // Envelope 6 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     else if(o.radio_env_mod==3)
                     {
-                        ImGui::VSliderFloat("##AT6", ImVec2(12, 80), &o.env[5].adsr.A.time, 100.0f,  10000.0f*o.scale_env[5], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##DT6", ImVec2(12, 80), &o.env[5].adsr.D.time, 1000.0f, 10000.0f*o.scale_env[5], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##ST6", ImVec2(12, 80), &o.env[5].adsr.S.time, 1000.0f, 10000.0f*o.scale_env[5], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
-                        ImGui::VSliderFloat("##RT6", ImVec2(12, 80), &o.env[5].adsr.R.time, 1000.0f, 10000.0f*o.scale_env[5], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##AT6", ImVec2(12, 80), &o.env[5].adsr.A.time, 100.0f,  10000.0f*o.env_scale[5], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##DT6", ImVec2(12, 80), &o.env[5].adsr.D.time, 1000.0f, 10000.0f*o.env_scale[5], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##ST6", ImVec2(12, 80), &o.env[5].adsr.S.time, 1000.0f, 10000.0f*o.env_scale[5], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
+                        ImGui::VSliderFloat("##RT6", ImVec2(12, 80), &o.env[5].adsr.R.time, 1000.0f, 10000.0f*o.env_scale[5], "", ImGuiSliderFlags_Logarithmic); ImGui::SameLine();
                     ImGui::PushStyleColor(ImGuiCol_SliderGrab, IM_COL32(180, 80, 80, 255));
                         ImGui::VSliderFloat("##AV6", ImVec2(12, 80), &o.env[5].adsr.A.value, 0.00001f, 1.0f, ""); ImGui::SameLine(); 
                         ImGui::VSliderFloat("##DV6", ImVec2(12, 80), &o.env[5].adsr.D.value, 0.00001f, 1.0f, ""); ImGui::SameLine();
@@ -1607,7 +1685,7 @@ int main(int, char**)
                     ImGui::PushItemWidth(216);
                     if(o.env_slider_type[5]==0)
                     {
-                        ImGui::DragFloat("##EnvScale6", &o.scale_env[5], 0.1, 1.0f, 100.0f, "ADSR 6 Scale %.3f", 1);
+                        ImGui::DragFloat("##EnvScale6", &o.env_scale[5], 0.1, 1.0f, 100.0f, "ADSR 6 Scale %.3f", 1);
                     }
                     else if(o.env_slider_type[5]==1)
                     {
@@ -1658,8 +1736,8 @@ int main(int, char**)
                     o.lfo_imprint[0] = imprint(&o.lfo[0], 120,1);
                     o.lfo_imprint[1] = imprint(&o.lfo[1], 120,1);
 
-                    const char* lfo_name1 = (o.lfo_imprint_type[0] >= 0 && o.lfo_imprint_type[0] < n_lfos) ? lfo_names[o.lfo_imprint_type[0]] : "Unknown";
-                    const char* lfo_name2 = (o.lfo_imprint_type[1] >= 0 && o.lfo_imprint_type[1] < n_lfos) ? lfo_names[o.lfo_imprint_type[1]] : "Unknown";
+                    const char* lfo_name1 = (o.lfo_form[0] >= 0 && o.lfo_form[0] < n_lfos) ? lfo_names[o.lfo_form[0]] : "Unknown";
+                    const char* lfo_name2 = (o.lfo_form[1] >= 0 && o.lfo_form[1] < n_lfos) ? lfo_names[o.lfo_form[1]] : "Unknown";
                     const char* mod_name_lfo_a = (o.lfo_mod_type[0] >= 0 && o.lfo_mod_type[0] < n_mods) ? mod_types[o.lfo_mod_type[0]] : "Unknown";
                     const char* mod_name_lfo_b = (o.lfo_mod_type[1] >= 0 && o.lfo_mod_type[1] < n_mods) ? mod_types[o.lfo_mod_type[1]] : "Unknown";
 
@@ -1669,9 +1747,9 @@ int main(int, char**)
                     ImGui::PushItemWidth(106);
                     ImGui::RadioButton("##SwitchEnv4", &o.radio_env_mod, 1); ImGui::SameLine();
                     ImGui::RadioButton("##SwitchEnv5", &o.radio_env_mod, 2); ImGui::SameLine();
-                    if(ImGui::SliderInt("##TypeLfoA", &o.lfo_imprint_type[0], 0, n_lfos-1, lfo_name1))
+                    if(ImGui::SliderInt("##TypeLfoA", &o.lfo_form[0], 0, n_lfos-1, lfo_name1))
                     {
-                        o.lfo[0].form = o.lfo_imprint_type[0];
+                        o.lfo[0].form = o.lfo_form[0];
                         o.lfo_imprint[0] = imprint(&o.lfo[0], 120, 1);
                     }
 
@@ -1679,9 +1757,9 @@ int main(int, char**)
                     ImGui::PushItemWidth(106);
                     ImGui::RadioButton("##SwitchEnv4", &o.radio_env_mod, 1); ImGui::SameLine();
                     ImGui::RadioButton("##SwitchEnv5", &o.radio_env_mod, 2); ImGui::SameLine();
-                    if(ImGui::SliderInt("##TypeLfoB", &o.lfo_imprint_type[1], 0, n_lfos-1, lfo_name2))
+                    if(ImGui::SliderInt("##TypeLfoB", &o.lfo_form[1], 0, n_lfos-1, lfo_name2))
                     {
-                        o.lfo[1].form = o.lfo_imprint_type[1];
+                        o.lfo[1].form = o.lfo_form[1];
                         o.lfo_imprint[1] = imprint(&o.lfo[1], 120, 1);
                     }
 
@@ -1792,6 +1870,8 @@ int main(int, char**)
                         if(ImGui::Button("Close",ImVec2(80, 17)))
                         ImGui::CloseCurrentPopup();
                         ImGui::SameLine();
+                        ////////////////////////////////////////////////////////////////
+                        // LOAD PRESET /////////////////////////////////////////////////
                         if(ImGui::Button("Load",ImVec2(80, 17)))
                         {
                             o.name = o.preset_list[sel];
@@ -1801,35 +1881,47 @@ int main(int, char**)
                             }
                             o.load();
 
-                            mute.renderer->adsr[0] = o.env[0].adsr; 
-                            mute.renderer->adsr[1] = o.env[1].adsr;
-                            mute.renderer->adsr[2] = o.env[2].adsr;
-                            mute.renderer->adsr[3] = o.env[3].adsr;
-                            mute.renderer->adsr[4] = o.env[4].adsr;
-                            mute.renderer->adsr[5] = o.env[5].adsr;
-
-                            o.lfo[0].form = o.lfo_imprint_type[0];
-                            o.lfo[1].form = o.lfo_imprint_type[1];
-                            
-                            form_lfo[o.lfo[0].form](&o.lfo[0]);
-                            form_lfo[o.lfo[1].form](&o.lfo[1]);
-                            o.lfo[0].init(false);
-                            o.lfo[1].init(false);
-
-                            mute.renderer->lfo[0].frequency = o.lfo[0].frequency;
-                            mute.renderer->lfo[1].frequency = o.lfo[1].frequency;
-                            mute.renderer->lfo[0].form = o.lfo[0].form;
-                            mute.renderer->lfo[1].form = o.lfo[1].form;
-
-                            mute.renderer->form_vco[0]= o.form_vco[0];
-                            mute.renderer->form_vco[1]= o.form_vco[1];
                             mute.renderer->volume = o.volume;
+                            for(int i=0; i<oscn; i++) 
+                            {
+                                mute.renderer->form_vco[i]  = o.form_vco[i];
+                                mute.renderer->cvin[i]      = o.amp_centre[i];
+                                mute.renderer->cvin[17+i]   = o.detune_centre[i];
+                                mute.renderer->cvin[14+i]   = o.pan_centre[i];
+                                mute.renderer->octave[i]    = o.octave[i];
+                                mute.renderer->cvin[6+i]    = o.phase_centre[i];
+                                mute.renderer->cvin[3+i]    = o.pwm_centre[i];
+                                mute.renderer->form_vcf[i]  = o.filter_type[i];
+                                mute.renderer->cvin[9+i]    = o.cutoff[i];
+                                mute.renderer->vcf[i].Q     = o.resonance[i];
+                                // Slider types o->pointers
+                            }
 
-                            o.lfo_imprint[0] = imprint(&o.lfo[0], 120, 1);
-                            o.lfo_imprint[1] = imprint(&o.lfo[1], 120, 1);
-                            mute.renderer->esq.pattern = o.beat;
-                            mute.renderer->esq.timeset(int(o.tempo*10000));
-                            mute.renderer->esq.set((get_scale(o.note_set, o.oct_set)));
+                            // mute.renderer->adsr[0] = o.env[0].adsr; 
+                            // mute.renderer->adsr[1] = o.env[1].adsr;
+                            // mute.renderer->adsr[2] = o.env[2].adsr;
+                            // mute.renderer->adsr[3] = o.env[3].adsr;
+                            // mute.renderer->adsr[4] = o.env[4].adsr;
+                            // mute.renderer->adsr[5] = o.env[5].adsr;
+
+                            // o.lfo[0].form = o.lfo_form[0];
+                            // o.lfo[1].form = o.lfo_form[1];
+                            
+                            // form_lfo[o.lfo[0].form](&o.lfo[0]);
+                            // form_lfo[o.lfo[1].form](&o.lfo[1]);
+                            // o.lfo[0].init(false);
+                            // o.lfo[1].init(false);
+
+                            // mute.renderer->lfo[0].frequency = o.lfo[0].frequency;
+                            // mute.renderer->lfo[1].frequency = o.lfo[1].frequency;
+                            // mute.renderer->lfo[0].form = o.lfo[0].form;
+                            // mute.renderer->lfo[1].form = o.lfo[1].form;
+
+                            // o.lfo_imprint[0] = imprint(&o.lfo[0], 120, 1);
+                            // o.lfo_imprint[1] = imprint(&o.lfo[1], 120, 1);
+                            // mute.renderer->esq.pattern = o.beat;
+                            // mute.renderer->esq.timeset(int(o.tempo*10000));
+                            // mute.renderer->esq.set((get_scale(o.note_set, o.oct_set)));
                             
                             ImGui::CloseCurrentPopup();
             
@@ -1842,6 +1934,23 @@ int main(int, char**)
                     if(ImGui::Button("Save",ImVec2(75, 17)))
                     {
                         o.name = pset_name;
+
+                            for(int i=0; i<oscn; i++) 
+                            {
+                                o.amp_centre[i] = mute.renderer->cvin[i];
+                                // Slider types o->pointers
+
+                                o.detune_centre[i]  = mute.renderer->cvin[17+i];
+                                o.pan_centre[i]     = mute.renderer->cvin[14+i];
+                                o.octave[i]         = mute.renderer->octave[i];
+                                o.phase_centre[i]   = mute.renderer->cvin[6+i];
+                                o.pwm_centre[i]     = mute.renderer->cvin[3+i];
+                                o.filter_type[i]    = mute.renderer->form_vcf[i];
+                                o.cutoff[i]         = mute.renderer->cvin[9+i];
+
+                                o.resonance[i]      = mute.renderer->vcf[i].Q;
+                            }
+
                         o.save();
                     }
                     ImGui::EndChild();
@@ -1910,49 +2019,49 @@ int main(int, char**)
                     if(o.amp_mod_type[0]>0)
                     {
                         mute.renderer->modmatrix[o.amp_mod_type[0]-1][0][0] = o.amp_mod_amount[0];
-                        mute.renderer->modmatrix[o.amp_mod_type[0]-1][0][1] = o.center_amp[0];
+                        mute.renderer->modmatrix[o.amp_mod_type[0]-1][0][1] = o.amp_centre[0];
                     }
                     if(o.amp_mod_type[1]>0)
                     {    
                         mute.renderer->modmatrix[o.amp_mod_type[1]-1][1][0] = o.amp_mod_amount[1];
-                        mute.renderer->modmatrix[o.amp_mod_type[1]-1][1][1] = o.center_amp[1];
+                        mute.renderer->modmatrix[o.amp_mod_type[1]-1][1][1] = o.amp_centre[1];
                     }
                     if(o.amp_mod_type[2]>0)
                     {    
                         mute.renderer->modmatrix[o.amp_mod_type[2]-1][2][0] = o.amp_mod_amount[2];
-                        mute.renderer->modmatrix[o.amp_mod_type[2]-1][2][1] = o.center_amp[2];
+                        mute.renderer->modmatrix[o.amp_mod_type[2]-1][2][1] = o.amp_centre[2];
                     }
 
                     if(o.pwm_mod_type[0]>0)
                     {
                         mute.renderer->modmatrix[o.pwm_mod_type[0]-1][3][0] = o.pwm_mod_amount[0];
-                        mute.renderer->modmatrix[o.pwm_mod_type[0]-1][3][1] = o.center_pwm[0];
+                        mute.renderer->modmatrix[o.pwm_mod_type[0]-1][3][1] = o.pwm_centre[0];
                     }
                     if(o.pwm_mod_type[1]>0)    
                     {
                         mute.renderer->modmatrix[o.pwm_mod_type[1]-1][4][0] = o.pwm_mod_amount[1];
-                        mute.renderer->modmatrix[o.pwm_mod_type[1]-1][4][1] = o.center_pwm[1];
+                        mute.renderer->modmatrix[o.pwm_mod_type[1]-1][4][1] = o.pwm_centre[1];
                     }
                     if(o.pwm_mod_type[2]>0)    
                     {
                         mute.renderer->modmatrix[o.pwm_mod_type[2]-1][5][0] = o.pwm_mod_amount[2];
-                        mute.renderer->modmatrix[o.pwm_mod_type[2]-1][5][1] = o.center_pwm[2];
+                        mute.renderer->modmatrix[o.pwm_mod_type[2]-1][5][1] = o.pwm_centre[2];
                     }
 
                     if(o.phase_mod_type[0]>0)
                     {  
                         mute.renderer->modmatrix[o.phase_mod_type[0]-1][6][0] = o.phase_mod_amount[0];
-                        mute.renderer->modmatrix[o.phase_mod_type[0]-1][6][1] = o.center_phase[0];
+                        mute.renderer->modmatrix[o.phase_mod_type[0]-1][6][1] = o.phase_centre[0];
                     }
                     if(o.phase_mod_type[1]>0)  
                     {
                         mute.renderer->modmatrix[o.phase_mod_type[1]-1][7][0] = o.phase_mod_amount[1];
-                        mute.renderer->modmatrix[o.phase_mod_type[1]-1][7][1] = o.center_phase[1];
+                        mute.renderer->modmatrix[o.phase_mod_type[1]-1][7][1] = o.phase_centre[1];
                     }
                     if(o.phase_mod_type[2]>0)  
                     {
                         mute.renderer->modmatrix[o.phase_mod_type[2]-1][8][0] = o.phase_mod_amount[2];
-                        mute.renderer->modmatrix[o.phase_mod_type[2]-1][8][1] = o.center_phase[2];
+                        mute.renderer->modmatrix[o.phase_mod_type[2]-1][8][1] = o.phase_centre[2];
                     }
 
                     if(o.cutoff_mod_type[0]>0) 

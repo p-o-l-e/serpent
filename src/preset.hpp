@@ -11,101 +11,115 @@
 #include <string>
 #include "spawner.hpp"
 
-#define envn 6
-#define lfos 4
-#define nn	 12
+#define envn 6  // Number of envelopes
+#define lfos 4  // Number of LFOs
+#define nn	 12 // Number of notes
 
 class preset
 {
     public:
+        const std::filesystem::path presets{"presets"};
+        const string path_prefix = "presets/";
+        vector<string> preset_list;
+        std::string version = "0.4.6";
         std::fstream        ff;
         std::stringstream   ss;
-        const std::filesystem::path presets{"presets"};
-        std::string version = "0.4.6";
+        std::string name;
+        size_t preset_count;
+        
+        float   volume  = 0.05;             // Master volume
 
-        float   volume  = 0.05;
-        float   tempo   = 0.1f, 
-                seed    = 0.001;
-        uint    beat    = 0x80808080;
-        int     rhythm[4] = {128, 128, 128, 128};
-        int     octaves = 1;
+        ///////////////////////////////////////////////////////////
+        // Oscillators ////////////////////////////////////////////
+        int     form_vco[oscn];             // Waveform
+        ///////////////////////////////////////////////////////////
+        int     amp_slider_type[oscn];      // Amplitude slider
+        int     amp_mod_type[oscn];         // Mod type
+        float   amp_mod_amount[oscn];       // Mod amount
+        float   amp_centre[oscn];           // Amp value
+        ///////////////////////////////////////////////////////////
+        int     detune_slider_type[oscn];
+        int     detune_mod_type[oscn];
+        float   detune_mod_amount[oscn];
+        float   detune_centre[oscn];
+        ///////////////////////////////////////////////////////////
+        int     pan_slider_type[oscn];
+        int     pan_mod_type[oscn];
+        float   pan_mod_amount[oscn];
+        float   pan_centre[oscn];
+        ///////////////////////////////////////////////////////////
+        int     octave[oscn];
+        ///////////////////////////////////////////////////////////
+        int     phase_slider_type[oscn];
+        int     phase_mod_type[oscn];
+        float   phase_mod_amount[oscn];
+        float   phase_centre[oscn];
+        ///////////////////////////////////////////////////////////
+        int     pwm_slider_type[oscn];
+        int     pwm_mod_type[oscn];
+        float   pwm_mod_amount[oscn];
+        float   pwm_centre[oscn];
+        ///////////////////////////////////////////////////////////
+        int     filter_type[oscn];
+        ///////////////////////////////////////////////////////////
+        int     cuttoff_slider_type[oscn];
+        int     cutoff_mod_type[oscn];
+        float   cutoff_mod_amount[oscn];
+        float   center_cutoff[oscn];
+        float   cutoff[oscn];   /// ???????
+        ///////////////////////////////////////////////////////////
+        float   resonance[oscn];
+        ///////////////////////////////////////////////////////////
 
-        int octave[oscn];
-            
+        ///////////////////////////////////////////////////////////
+        // Envelopes //////////////////////////////////////////////
+        envelope_adsr env[envn];
+        vector<float> env_imprint[envn];
+        int     env_slider_type[envn];
+        int     env_form[envn];
+        int     radio_env_amp       = 1;
+        int     radio_env_mod       = 1;
+        bool    env_freerun[3];
+        float   env_scale[envn];
+
+        ///////////////////////////////////////////////////////////
+        // LFOs ///////////////////////////////////////////////////
+        LFO     lfo[lfos];
+        vector<float> lfo_imprint[lfos];
+
+        int     lfo_form[lfos];
+        int     lfo_mod_type[lfos];
+        float   lfo_mod_amount[lfos];
+
+        float   lfo_amp[lfos];
+        float   lfo_morph[lfos];
+        
+        
+        ///////////////////////////////////////////////////////////
+        // Seuencer ///////////////////////////////////////////////
+        bool    trigger_sequence    = true;
         vector<bool> note_set = {1,0,0,0,0,0,0,0,0,0,0,0};
         vector<int>  oct_set  = {4,4,4,4,4,4,4,4,4,4,4,4};
+        float   tempo       = 0.100f; 
+        float   seed        = 0.001f;
+        uint    beat        = 0x80808080;
+        int     rhythm[4]   = {128, 128, 128, 128};
+        int     octaves     = 1;
 
         int     oct [nn]; // Octave values
         bool    note[nn]; // Note On & Off
 
-        // Center values for modulations
-        float   center_amp[oscn],
-                center_pwm[oscn],
-                center_phase[oscn],
-                center_cutoff[oscn];
+        ///////////////////////////////////////////////////////////
+        // Effects ////////////////////////////////////////////////
 
-        int     cuttoff_slider_type[oscn];
-        int     amp_slider_type[oscn];
-        int     detune_slider_type[oscn];
         int     delay_slider_type[oscn];
-        int     pan_slider_type[oscn];
-        int     phase_slider_type[oscn];
-        int     pwm_slider_type[oscn];
-        float   cutoff[oscn];
-
-        int     env_slider_type[envn];
-        int     env_form[envn];
-
-        
-        int     form_vco[oscn];
-
-        int     amp_mod_type[oscn];
-        int     detune_mod_type[oscn];
-        int     pan_mod_type[oscn];
-        float   amp_mod_amount[oscn];
-        float   detune_mod_amount[oscn];
         float   ddtime_mod_amount[oscn];
         int     ddtime_mod_type[oscn];
-        float   pan_mod_amount[oscn];
-        int     pwm_mod_type[oscn];
-        float   pwm_mod_amount[oscn];
-        int     phase_mod_type[oscn];
-        float   phase_mod_amount[oscn];
-        int     cutoff_mod_type[oscn];
-        float   cutoff_mod_amount[oscn];
-
-        int     radio_form_env[envn];  // Implement!
-        float   scale_env[envn];
-
-        bool    trigger_sequence    = true;
-
-        int     radio_env_amp       = true, 
-                radio_env_mod       = true;
-
-
-        int     lfo_imprint_type[lfos];
-        int     lfo_mod_type[lfos];
-        float   lfo_mod_amount[lfos];
-
-
-        LFO     lfo[lfos];
-        float   lfo_amp[lfos];
-        float   lfo_morph[lfos];
         
-        envelope_adsr env[envn];
 
-        vector<float> env_imprint[envn]; // Implement!
-        vector<float> lfo_imprint[lfos];
+        bool    if_square_a = false;
+        bool    if_square_b = false;
 
-
-        bool    if_square_a = false, 
-                if_square_b = false;
-            
-
-        const string    path_prefix = "presets/";
-        vector<string>  preset_list;
-        string name;
-        size_t preset_count;
 
         void save(const string&);
         void save();
@@ -133,81 +147,109 @@ void preset::get_list()
 void preset::save()
 {
     ff.open(path_prefix+name, std::ios_base::out);
-    //ff<<"<SerpentPreset version = "<<version<<">\n"; // Xml root 
-
 
     ff<<volume<<"\n";
-    for(int i=0; i<oscn; i++) ff<<form_vco[i]<<"\n";
-
-    ff<<tempo<<"\n";
-    ff<<beat<<"\n";
-    ff<<seed<<"\n";
-    ff<<octaves<<"\n";
-
-    for(auto i: note_set) ff<<i<<"\n";
-    for(auto i: oct_set ) ff<<i<<"\n";
-
-
-	for(int i=0; i<nn; i++)
-	{
-		ff<<oct[i]<<"\n"; 
-    	ff<<note[i]<<"\n";
-	}
-
+    ///////////////////////////////////////////////////////////
+    // Oscillators ////////////////////////////////////////////
     for(int i=0; i<oscn; i++) 
     {
-        ff<<cuttoff_slider_type[i]<<"\n";
+        ff<<form_vco[i]<<"\n";
+    ///////////////////////////////////////////////////////////
         ff<<amp_slider_type[i] <<"\n";
-        ff<<phase_slider_type[i]<<"\n";
-        ff<<cutoff[i]<<"\n";
         ff<<amp_mod_type[i]<<"\n";
         ff<<amp_mod_amount[i]<<"\n";
-        ff<<pwm_mod_type[i]<<"\n";
-        ff<<pwm_mod_amount[i]<<"\n";
+        ff<<amp_centre[i]<<"\n";
+    ///////////////////////////////////////////////////////////
+        ff<<detune_slider_type[i]<<"\n";
+        ff<<detune_mod_type[i]<<"\n";
+        ff<<detune_mod_amount[i]<<"\n";
+        ff<<detune_centre[i]<<"\n";
+    ///////////////////////////////////////////////////////////
+        ff<<pan_slider_type[i]<<"\n";
+        ff<<pan_mod_type[i]<<"\n";
+        ff<<pan_mod_amount[i]<<"\n";
+        ff<<pan_centre[i]<<"\n";   
+    ///////////////////////////////////////////////////////////
+        ff<<octave[i]<<"\n";
+    ///////////////////////////////////////////////////////////
+        ff<<phase_slider_type[i]<<"\n";
         ff<<phase_mod_type[i]<<"\n";
         ff<<phase_mod_amount[i]<<"\n";
+        ff<<phase_centre[i]<<"\n";
+    ///////////////////////////////////////////////////////////
+        ff<<pwm_slider_type[i]<<"\n";
+        ff<<pwm_mod_type[i]<<"\n";
+        ff<<pwm_mod_amount[i]<<"\n";
+        ff<<pwm_centre[i]<<"\n";
+    ///////////////////////////////////////////////////////////
+        ff<<filter_type[i]<<"\n";
+    ///////////////////////////////////////////////////////////
+        ff<<cuttoff_slider_type[i]<<"\n";
         ff<<cutoff_mod_type[i]<<"\n";
         ff<<cutoff_mod_amount[i]<<"\n";
+        ff<<center_cutoff[i]<<"\n";
+        ff<<cutoff[i]<<"\n";
+    ///////////////////////////////////////////////////////////
+        ff<<resonance[i]<<"\n";
+    ///////////////////////////////////////////////////////////
     }
 
-    ff<<trigger_sequence<<"\n";
 
-    ff<<radio_env_amp<<"\n";
-    ff<<radio_env_mod<<"\n";
+    // for(int i=0; i<oscn; i++)
+    // {
+    //     ff<<form_vco[i]<<"\n";
+    // }
 
-    ff<<lfo_imprint_type[0]<<"\n";
-    ff<<lfo_imprint_type[1]<<"\n";
-    ff<<lfo_mod_type[0]<<"\n";
-    ff<<lfo_mod_type[1]<<"\n";
-    ff<<lfo_mod_amount[0]<<"\n";
-    ff<<lfo_mod_amount[1]<<"\n";
+    // ff<<trigger_sequence<<"\n";
 
-    ff<<lfo[0].frequency<<"\n";
-    ff<<lfo[1].frequency<<"\n";
-    /// Amp Envelopes //////////////
-	for(int i=0; i<envn; i++)
-	{
-		ff<<env[i].adsr.A.time<<"\n";
-		ff<<env[i].adsr.D.time<<"\n";
-		ff<<env[i].adsr.S.time<<"\n";
-		ff<<env[i].adsr.R.time<<"\n";
+    // ff<<radio_env_amp<<"\n";
+    // ff<<radio_env_mod<<"\n";
 
-		ff<<env[i].adsr.A.value<<"\n";
-		ff<<env[i].adsr.D.value<<"\n";
-		ff<<env[i].adsr.S.value<<"\n";
-		ff<<env[i].adsr.R.value<<"\n";
+    // ff<<lfo_form[0]<<"\n";
+    // ff<<lfo_form[1]<<"\n";
+    // ff<<lfo_mod_type[0]<<"\n";
+    // ff<<lfo_mod_type[1]<<"\n";
+    // ff<<lfo_mod_amount[0]<<"\n";
+    // ff<<lfo_mod_amount[1]<<"\n";
 
-		ff<<radio_form_env[i]<<"\n"; // Implement!
-		ff<<scale_env[i]<<"\n"; 
-	}
+    // ff<<lfo[0].frequency<<"\n";
+    // ff<<lfo[1].frequency<<"\n";
+    // /// Amp Envelopes //////////////
+	// for(int i=0; i<envn; i++)
+	// {
+	// 	ff<<env[i].adsr.A.time<<"\n";
+	// 	ff<<env[i].adsr.D.time<<"\n";
+	// 	ff<<env[i].adsr.S.time<<"\n";
+	// 	ff<<env[i].adsr.R.time<<"\n";
+
+	// 	ff<<env[i].adsr.A.value<<"\n";
+	// 	ff<<env[i].adsr.D.value<<"\n";
+	// 	ff<<env[i].adsr.S.value<<"\n";
+	// 	ff<<env[i].adsr.R.value<<"\n";
+
+	// 	//ff<<radio_form_env[i]<<"\n"; // Implement!
+	// 	ff<<env_scale[i]<<"\n"; 
+	// }
 
 
-    ff<<if_square_a<<"\n";
-    ff<<if_square_b<<"\n";
+    // ff<<tempo<<"\n";
+    // ff<<beat<<"\n";
+    // ff<<seed<<"\n";
+    // ff<<octaves<<"\n";
+
+    // ff<<if_square_a<<"\n";
+    // ff<<if_square_b<<"\n";
                
+    // for(auto i: note_set) ff<<i<<"\n";
+    // for(auto i: oct_set ) ff<<i<<"\n";
 
 
-    //ff<<"</SerpentPreset>\n"; // XML root
+	// for(int i=0; i<nn; i++)
+	// {
+	// 	ff<<oct[i]<<"\n"; 
+    // 	ff<<note[i]<<"\n";
+	// }
+
     ff.close();
 }
 
@@ -216,79 +258,106 @@ void preset::load()
     ff.open(path_prefix+name, std::ios_base::in);
 
     ff>>volume;
-    for(int i=0; i<oscn; i++) ff>>form_vco[i];
-
-    ff>>tempo;
-    ff>>beat;
-    ff>>seed;
-    ff>>octaves;
-    int f=0;
-
-	for(int i=0; i<nn; i++)
-	{
-		ff>>f;
-        note_set[i] = f;
-        f = 0;
-
-		ff>>oct_set[i];
-		ff>>oct[i];
-    	ff>>note[i];
-	}
-
-
+    ///////////////////////////////////////////////////////////
+    // Oscillators ////////////////////////////////////////////
     for(int i=0; i<oscn; i++) 
 	{
-		ff>>cuttoff_slider_type[i];
+        ff>>form_vco[i];
+    ///////////////////////////////////////////////////////////
 		ff>>amp_slider_type[i];
-		ff>>phase_slider_type[i];
-		ff>>cutoff[i];
-
-		ff>>amp_mod_type[i];
+        ff>>amp_mod_type[i];
 		ff>>amp_mod_amount[i];
-		ff>>pwm_mod_type[i];
-		ff>>pwm_mod_amount[i];
-		ff>>phase_mod_type[i];
-		ff>>phase_mod_amount[i];
-		ff>>cutoff_mod_type[i];
-		ff>>cutoff_mod_amount[i];
+        ff>>amp_centre[i];
+    ///////////////////////////////////////////////////////////
+        ff>>detune_slider_type[i];
+        ff>>detune_mod_type[i];
+        ff>>detune_mod_amount[i];
+        ff>>detune_centre[i];
+    ///////////////////////////////////////////////////////////
+        ff>>pan_slider_type[i];
+        ff>>pan_mod_type[i];
+        ff>>pan_mod_amount[i];
+        ff>>pan_centre[i];   
+    ///////////////////////////////////////////////////////////
+        ff>>octave[i];
+    ///////////////////////////////////////////////////////////
+        ff>>phase_slider_type[i];
+        ff>>phase_mod_type[i];
+        ff>>phase_mod_amount[i];
+        ff>>phase_centre[i];
+    ///////////////////////////////////////////////////////////
+        ff>>pwm_slider_type[i];
+        ff>>pwm_mod_type[i];
+        ff>>pwm_mod_amount[i];
+        ff>>pwm_centre[i];
+    ///////////////////////////////////////////////////////////
+        ff>>filter_type[i];
+    ///////////////////////////////////////////////////////////
+        ff>>cuttoff_slider_type[i];
+        ff>>cutoff_mod_type[i];
+        ff>>cutoff_mod_amount[i];
+        ff>>center_cutoff[i];
+        ff>>cutoff[i];
+    ///////////////////////////////////////////////////////////
+        ff>>resonance[i];
+    ///////////////////////////////////////////////////////////
 	}
 	
 
-    ff>>trigger_sequence;
 
-    ff>>radio_env_amp;
-    ff>>radio_env_mod;
+    // for(int i=0; i<oscn; i++) ff>>form_vco[i];
 
-    ff>>lfo_imprint_type[0];
-    ff>>lfo_imprint_type[1];
-    ff>>lfo_mod_type[0];
-    ff>>lfo_mod_type[1];
-    ff>>lfo_mod_amount[0];
-    ff>>lfo_mod_amount[1];
+    // ff>>tempo;
+    // ff>>beat;
+    // ff>>seed;
+    // ff>>octaves;
+    // int f=0;
+
+	// for(int i=0; i<nn; i++)
+	// {
+	// 	ff>>f;
+    //     note_set[i] = f;
+    //     f = 0;
+
+	// 	ff>>oct_set[i];
+	// 	ff>>oct[i];
+    // 	ff>>note[i];
+	// }
+
+    // ff>>trigger_sequence;
+
+    // ff>>radio_env_amp;
+    // ff>>radio_env_mod;
+
+    // ff>>lfo_form[0];
+    // ff>>lfo_form[1];
+    // ff>>lfo_mod_type[0];
+    // ff>>lfo_mod_type[1];
+    // ff>>lfo_mod_amount[0];
+    // ff>>lfo_mod_amount[1];
 
 
-    ff>>lfo[0].frequency;
-    ff>>lfo[1].frequency;
+    // ff>>lfo[0].frequency;
+    // ff>>lfo[1].frequency;
 
-    /// Amp Envelopes ////////
-	for(int i=0; i<envn; i++)
-	{
-		ff>>env[i].adsr.A.time;
-		ff>>env[i].adsr.D.time;
-		ff>>env[i].adsr.S.time;
-		ff>>env[i].adsr.R.time;
+    // /// Amp Envelopes ////////
+	// for(int i=0; i<envn; i++)
+	// {
+	// 	ff>>env[i].adsr.A.time;
+	// 	ff>>env[i].adsr.D.time;
+	// 	ff>>env[i].adsr.S.time;
+	// 	ff>>env[i].adsr.R.time;
 
-		ff>>env[i].adsr.A.value;
-		ff>>env[i].adsr.D.value;
-		ff>>env[i].adsr.S.value;
-		ff>>env[i].adsr.R.value;
+	// 	ff>>env[i].adsr.A.value;
+	// 	ff>>env[i].adsr.D.value;
+	// 	ff>>env[i].adsr.S.value;
+	// 	ff>>env[i].adsr.R.value;
 
-		ff>>radio_form_env[i]; // Implement!
-		ff>>scale_env[i]; 
-	}
+	// 	ff>>env_scale[i]; 
+	// }
 
-    ff>>if_square_a;
-    ff>>if_square_b;
+    // ff>>if_square_a;
+    // ff>>if_square_b;
 
 
     ff.close();
@@ -318,7 +387,7 @@ preset::preset()
         } 
 		for(int i=0; i<envn; i++)
 		{
-			scale_env[i]=1.0f; 
+			env_scale[i]=1.0f; 
 		}
 }
 

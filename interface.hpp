@@ -1,3 +1,4 @@
+#pragma once
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <vector>
@@ -7,8 +8,8 @@ using std::vector;
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
-const SDL_Rect drag_area = {0, 0, 640, 20};
-static SDL_HitTestResult SDLCALL
+const 	SDL_Rect drag_area = {0, 0, 640, 20};
+static 	SDL_HitTestResult SDLCALL
 hitTest(SDL_Window *window, const SDL_Point *pt, void *data)
 {
     if (SDL_PointInRect(pt, &drag_area)) {
