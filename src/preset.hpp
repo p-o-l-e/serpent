@@ -194,43 +194,43 @@ void preset::save()
     ///////////////////////////////////////////////////////////
     }
 
+    ///////////////////////////////////////////////////////////
+    // Amp Envelopes //////////////////////////////////////////
+	for(int i=0; i<envn; i++)
+	{
+		ff<<env[i].adsr.A.time<<"\n";
+		ff<<env[i].adsr.D.time<<"\n";
+		ff<<env[i].adsr.S.time<<"\n";
+		ff<<env[i].adsr.R.time<<"\n";
 
-    // for(int i=0; i<oscn; i++)
-    // {
-    //     ff<<form_vco[i]<<"\n";
-    // }
+		ff<<env[i].adsr.A.value<<"\n";
+		ff<<env[i].adsr.D.value<<"\n";
+		ff<<env[i].adsr.S.value<<"\n";
+		ff<<env[i].adsr.R.value<<"\n";
+
+		ff<<env_scale[i]<<"\n"; 
+
+        ff<<env_slider_type[i]<<"\n";
+        ff<<env_form[i]<<"\n";
+        if(i<3) ff<<env_freerun[i]<<"\n";
+	}
+
+    ff<<radio_env_amp<<"\n";
+    ff<<radio_env_mod<<"\n";
+    
+    ///////////////////////////////////////////////////////////
+    // LFOs ///////////////////////////////////////////////////
+	for(int i=0; i<lfos; i++)
+	{
+        ff<<lfo_form[i]<<"\n";
+        ff<<lfo_mod_type[i]<<"\n";
+        ff<<lfo_mod_amount[i]<<"\n";
+        ff<<lfo[i].frequency<<"\n";
+    }
+
+
 
     // ff<<trigger_sequence<<"\n";
-
-    // ff<<radio_env_amp<<"\n";
-    // ff<<radio_env_mod<<"\n";
-
-    // ff<<lfo_form[0]<<"\n";
-    // ff<<lfo_form[1]<<"\n";
-    // ff<<lfo_mod_type[0]<<"\n";
-    // ff<<lfo_mod_type[1]<<"\n";
-    // ff<<lfo_mod_amount[0]<<"\n";
-    // ff<<lfo_mod_amount[1]<<"\n";
-
-    // ff<<lfo[0].frequency<<"\n";
-    // ff<<lfo[1].frequency<<"\n";
-    // /// Amp Envelopes //////////////
-	// for(int i=0; i<envn; i++)
-	// {
-	// 	ff<<env[i].adsr.A.time<<"\n";
-	// 	ff<<env[i].adsr.D.time<<"\n";
-	// 	ff<<env[i].adsr.S.time<<"\n";
-	// 	ff<<env[i].adsr.R.time<<"\n";
-
-	// 	ff<<env[i].adsr.A.value<<"\n";
-	// 	ff<<env[i].adsr.D.value<<"\n";
-	// 	ff<<env[i].adsr.S.value<<"\n";
-	// 	ff<<env[i].adsr.R.value<<"\n";
-
-	// 	//ff<<radio_form_env[i]<<"\n"; // Implement!
-	// 	ff<<env_scale[i]<<"\n"; 
-	// }
-
 
     // ff<<tempo<<"\n";
     // ff<<beat<<"\n";
@@ -303,7 +303,39 @@ void preset::load()
     ///////////////////////////////////////////////////////////
 	}
 	
+    ///////////////////////////////////////////////////////////
+    // Amp Envelopes //////////////////////////////////////////
+	for(int i=0; i<envn; i++)
+	{
+		ff>>env[i].adsr.A.time;
+		ff>>env[i].adsr.D.time;
+		ff>>env[i].adsr.S.time;
+		ff>>env[i].adsr.R.time;
 
+		ff>>env[i].adsr.A.value;
+		ff>>env[i].adsr.D.value;
+		ff>>env[i].adsr.S.value;
+		ff>>env[i].adsr.R.value;
+
+		ff>>env_scale[i]; 
+
+        ff>>env_slider_type[i];
+        ff>>env_form[i];
+        if(i<3) ff>>env_freerun[i];
+	}
+
+    ff>>radio_env_amp;
+    ff>>radio_env_mod;
+
+    ///////////////////////////////////////////////////////////
+    // LFOs ///////////////////////////////////////////////////
+	for(int i=0; i<lfos; i++)
+	{
+        ff>>lfo_form[i];
+        ff>>lfo_mod_type[i];
+        ff>>lfo_mod_amount[i];
+        ff>>lfo[i].frequency;
+    }
 
     // for(int i=0; i<oscn; i++) ff>>form_vco[i];
 
@@ -325,37 +357,6 @@ void preset::load()
 	// }
 
     // ff>>trigger_sequence;
-
-    // ff>>radio_env_amp;
-    // ff>>radio_env_mod;
-
-    // ff>>lfo_form[0];
-    // ff>>lfo_form[1];
-    // ff>>lfo_mod_type[0];
-    // ff>>lfo_mod_type[1];
-    // ff>>lfo_mod_amount[0];
-    // ff>>lfo_mod_amount[1];
-
-
-    // ff>>lfo[0].frequency;
-    // ff>>lfo[1].frequency;
-
-    // /// Amp Envelopes ////////
-	// for(int i=0; i<envn; i++)
-	// {
-	// 	ff>>env[i].adsr.A.time;
-	// 	ff>>env[i].adsr.D.time;
-	// 	ff>>env[i].adsr.S.time;
-	// 	ff>>env[i].adsr.R.time;
-
-	// 	ff>>env[i].adsr.A.value;
-	// 	ff>>env[i].adsr.D.value;
-	// 	ff>>env[i].adsr.S.value;
-	// 	ff>>env[i].adsr.R.value;
-
-	// 	ff>>env_scale[i]; 
-	// }
-
     // ff>>if_square_a;
     // ff>>if_square_b;
 

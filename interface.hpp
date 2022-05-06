@@ -52,7 +52,6 @@ void set_style(void)
     ImGuiStyle * style = &ImGui::GetStyle();
     ImVec4 *cstyle = ImGui::GetStyle().Colors;
 
-    //cstyle[ImGuiCol_FrameBg] = ImVec4(0.149, 0.196, 0.219,1);
 	cstyle[ImGuiCol_FrameBg] 	= ImVec4(0.14f, 0.20f, 0.28f, 1.00f);
     cstyle[ImGuiCol_Text] 		= ImVec4(0.50f, 0.70f, 0.70f, 1.00f);
     style->WindowPadding 		= ImVec2(5, 5);
@@ -68,3 +67,49 @@ void set_style(void)
 	style->GrabRounding 		= 1.00f;
     style->PopupRounding 		= 3.00f;
 }
+
+struct constraints
+{
+	ImVec4 blue_base;
+	ImVec4 blue_indigo;
+	ImVec4 blue_glow;
+	ImVec4 blue_teal;
+	ImVec4 red_coral;
+	ImVec4 red_salmon;
+
+	float scale = 1.00f;
+	ImVec2 window_main;
+	ImVec2 child_a;
+	ImVec2 child_osc;
+	float  slider_a;
+	void set();
+};
+
+void constraints::set()
+{
+	window_main.x 	= 788.0f * scale;
+	window_main.y	= 510.0f * scale;
+
+	child_a.x 		= 470.0f * scale;
+	child_a.y 		= 460.0f * scale;
+
+	child_osc.x 	= 154.0f * scale;
+	child_osc.y 	= 206.0f * scale;
+
+	slider_a		= 132.0f * scale;
+
+	blue_base 		= ImVec4(0.140f, 0.200f, 0.280f, 1.000f);
+	blue_glow		= ImVec4(0.239f, 0.521f, 0.878f, 1.000f);
+	blue_indigo 	= ImVec4(0.129f, 0.215f, 0.349f, 1.000f);
+	blue_teal		= ImVec4(0.149f, 0.251f, 0.353f, 1.000f);
+	red_coral		= ImVec4(0.706f, 0.314f, 0.314f, 1.000f); // 0xB45050FF 
+	red_salmon		= ImVec4(0.659f, 0.396f, 0.317f, 1.000f); // 0xA86551FF
+	// IM_COL32(61, 133, 224, 255) 0.239f
+	// IM_COL32(33, 55, 89, 255)
+	//(0.129f, )
+	// IM_COL32(38, 64, 90,255) = (0.149f, 0.251f, 0.353f, 1.000f)
+	// IM_COL32(180, 80, 80, 255)
+	
+}
+
+constraints cs;
