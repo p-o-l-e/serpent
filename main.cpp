@@ -157,9 +157,9 @@ int main(int, char**)
             static int  switch_lfo_a,
                         switch_lfo_b;
             static bool f[32];
-            static bool seed_up = false, seed_down = false;
+            // static bool seed_up = false, seed_down = false;
 
-            static int steps = 32;
+            //static int steps = 32;
 
             static preset o;
             
@@ -284,7 +284,7 @@ int main(int, char**)
             ImGui::SetNextWindowPos(ImVec2(0.0f,0.0f));
             ImGui::Begin("##FF", NULL, ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoBackground|ImGuiWindowFlags_NoScrollbar|ImGuiWindowFlags_NoCollapse);    
             
-            
+
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Child #1 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ImGui::BeginChild(1, cs.child_a, false);
@@ -908,77 +908,68 @@ int main(int, char**)
                     ImGui::PushItemWidth(112);
                     ImGui::PopStyleColor();
                     
-                    if (ImGui::SliderFloat("##Seed", &o.seed, 0.0001f, 1.0f, "Seed:  %.4f"))
+                    if (ImGui::SliderFloat("##Seed", &o.seed[0], 0.0001f, 1.0f, "Seed:  %.4f"))
                     {                 
-                        mute.renderer->esq.seed[0] = int(o.seed*10000.0f);         
+                        mute.renderer->esq.seed[0] = int(o.seed[0]*10000.0f);         
                         mute.renderer->esq.regenerate(mute.renderer->algorhithm[0]);
                     }
                     if (mute.renderer->esq.seed[0] > 10000)
                     {
-                        seed_up = false;
-                        seed_down = true;
+                        mute.renderer->regenerate[0] = -1;
                         mute.renderer->esq.seed[0] = 10000;
                     }
                     if (mute.renderer->esq.seed[0] < 1)
                     {
-                        seed_up = true;
-                        seed_down = false;
+                        mute.renderer->regenerate[0] = 1;
                         mute.renderer->esq.seed[0] = 1;
                     }
                     
-                    o.seed = float(mute.renderer->esq.seed[0])/10000.0f;
+                    o.seed[0] = float(mute.renderer->esq.seed[0])/10000.0f;
                     ImGui::PushStyleColor(ImGuiCol_SliderGrab, cs.blue_indigo);
                     ImGui::SameLine();
-                    if(seed_up)
+
+                    if(mute.renderer->regenerate[0] == 1)
                     {
                         ImGui::PushStyleColor(ImGuiCol_Button, cs.blue_glow);
                         if (ImGui::ArrowButton("##SeedUp", ImGuiDir_Up))
                         {
-                            seed_up = false;
+                            mute.renderer->regenerate[0] = 0;
                         }
                         ImGui::PopStyleColor();
 
                         ImGui::SameLine();
                         if (ImGui::ArrowButton("##SeedDown", ImGuiDir_Down))
                         {
-                            seed_up = false;
-                            seed_down = true;
+                            mute.renderer->regenerate[0] = -1;
                         }
-
-                        mute.renderer->regenerate[0] = 1;
-
                     }
-                    else if(seed_down)
+                    else if(mute.renderer->regenerate[0] == -1)
                     {
                         if (ImGui::ArrowButton("##SeedUp", ImGuiDir_Up))
                         {
-                            seed_up = true;
-                            seed_down = false;
+                            mute.renderer->regenerate[0] = 1;
                         }
 
                         ImGui::SameLine();
                         ImGui::PushStyleColor(ImGuiCol_Button, cs.blue_glow);
                         if (ImGui::ArrowButton("##SeedDown", ImGuiDir_Down))
                         {
-                            seed_down = false;
+                            mute.renderer->regenerate[0] = 0;
                         }
                         ImGui::PopStyleColor();
-                        mute.renderer->regenerate[0] = -1;
-
                     }
                     else
                     {
                         if (ImGui::ArrowButton("##SeedUp", ImGuiDir_Up))
                         {
-                            seed_up = true;
+                            mute.renderer->regenerate[0] = 1;
                         }
 
                         ImGui::SameLine();
                         if (ImGui::ArrowButton("##SeedDown", ImGuiDir_Down))
                         {
-                            seed_down = true;
+                            mute.renderer->regenerate[0] = -1;
                         }
-                        mute.renderer->regenerate[0] = 0;
                     }
 
                     ImGui::SameLine();
@@ -1171,40 +1162,40 @@ int main(int, char**)
                 
     
  
-                if(steps == 32)
+                if(o.steps == 32)
                 {
                     mute.renderer->esq.divisor = 1;
-                    if(ImGui::Button("8", ImVec2(23,17))) steps = 8;
+                    if(ImGui::Button("8", ImVec2(23,17))) o.steps = 8;
                     ImGui::SameLine();
-                    if(ImGui::Button("16", ImVec2(23,17))) steps = 16;
+                    if(ImGui::Button("16", ImVec2(23,17))) o.steps = 16;
                     ImGui::SameLine();
                     ImGui::PushStyleColor(ImGuiCol_Button, cs.blue_glow);
                     ImGui::Button("32", ImVec2(23,17));
                     ImGui::PopStyleColor();
                 }
 
-                else if(steps == 16)
+                else if(o.steps == 16)
                 {
                     mute.renderer->esq.divisor = 2;
-                    if(ImGui::Button("8", ImVec2(23,17))) steps = 8;
+                    if(ImGui::Button("8", ImVec2(23,17))) o.steps = 8;
                     ImGui::SameLine();
                     ImGui::PushStyleColor(ImGuiCol_Button, cs.blue_glow);
                     ImGui::Button("16", ImVec2(23,17));
                     ImGui::PopStyleColor();
                     ImGui::SameLine();
-                    if(ImGui::Button("32", ImVec2(23,17))) steps = 32;
+                    if(ImGui::Button("32", ImVec2(23,17))) o.steps = 32;
                 }
 
-                else if(steps == 8)
+                else if(o.steps == 8)
                 {
                     mute.renderer->esq.divisor = 4;
                     ImGui::PushStyleColor(ImGuiCol_Button, cs.blue_glow);
                     ImGui::Button("8", ImVec2(23,17));
                     ImGui::PopStyleColor();
                     ImGui::SameLine();
-                    if(ImGui::Button("16", ImVec2(23,17))) steps = 16;
+                    if(ImGui::Button("16", ImVec2(23,17))) o.steps = 16;
                     ImGui::SameLine();
-                    if(ImGui::Button("32", ImVec2(23,17))) steps = 32;
+                    if(ImGui::Button("32", ImVec2(23,17))) o.steps = 32;
                 }
 
 
@@ -1918,7 +1909,20 @@ int main(int, char**)
                                 //form_lfo[o.lfo[i].form](&o.lfo[i]);
                                 // o.lfo_imprint[i] = imprint(&o.lfo[i], 120, 1);
                             }
+                            mute.renderer->trigger_sequence = o.trigger_sequence;
+                            mute.renderer->esq.seed[0] = int(o.seed[0]*10000.0f); 
+                            mute.renderer->esq.seed[1] = o.seed[1];
+                            mute.renderer->seed_step[0] = o.step[0];
+                            mute.renderer->seed_step[1] = o.step[1];
 
+                            mute.renderer->regenerate[0] = o.direction[0];
+                            mute.renderer->regenerate[1] = o.direction[1];
+
+                            mute.renderer->algorhithm[0] = o.algorhithm[0];
+                            mute.renderer->algorhithm[1] = o.algorhithm[1];
+
+                            mute.renderer->esq.pattern = o.beat;
+                            rhythm_change = true;
                             // form_lfo[o.lfo[0].form](&o.lfo[0]);
                             // form_lfo[o.lfo[1].form](&o.lfo[1]);
                             // o.lfo[0].init(false);
@@ -1968,6 +1972,17 @@ int main(int, char**)
                                 o.env[i].adsr       = mute.renderer->adsr[i]; 
                                 if(i<3) o.env_freerun[i] = mute.renderer->freerun[i];
                             }
+
+                            o.trigger_sequence = mute.renderer->trigger_sequence;
+                            o.seed[1] = mute.renderer->esq.seed[1];
+                            o.step[0] = mute.renderer->seed_step[0];
+                            o.step[1] = mute.renderer->seed_step[1];
+
+                            o.direction[0] = mute.renderer->regenerate[0];
+                            o.direction[1] = mute.renderer->regenerate[1];
+
+                            o.algorhithm[0] = mute.renderer->algorhithm[0];
+                            o.algorhithm[1] = mute.renderer->algorhithm[1];
 
                         o.save();
                     }

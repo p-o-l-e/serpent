@@ -98,13 +98,18 @@ class preset
         ///////////////////////////////////////////////////////////
         // Seuencer ///////////////////////////////////////////////
         bool    trigger_sequence    = true;
-        vector<bool> note_set = {1,0,0,0,0,0,0,0,0,0,0,0};
-        vector<int>  oct_set  = {4,4,4,4,4,4,4,4,4,4,4,4};
-        float   tempo       = 0.100f; 
-        float   seed        = 0.001f;
+        vector<bool> note_set   = {1,0,0,0,0,0,0,0,0,0,0,0};
+        vector<int>  oct_set    = {4,4,4,4,4,4,4,4,4,4,4,4};
+        float   tempo           = 0.100f; 
+
+        float   seed[2];
+        float   step[2];
         uint    beat        = 0x80808080;
         int     rhythm[4]   = {128, 128, 128, 128};
         int     octaves     = 1;
+        int     steps       = 32;
+        int     direction[2];
+        int     algorhithm[2];
 
         int     oct [nn]; // Octave values
         bool    note[nn]; // Note On & Off
@@ -116,11 +121,6 @@ class preset
         float   ddtime_mod_amount[oscn];
         int     ddtime_mod_type[oscn];
         
-
-        bool    if_square_a = false;
-        bool    if_square_b = false;
-
-
         void save(const string&);
         void save();
         void load();
@@ -228,27 +228,32 @@ void preset::save()
         ff<<lfo[i].frequency<<"\n";
     }
 
+    ///////////////////////////////////////////////////////////
+    // Sequencer //////////////////////////////////////////////
 
+    ff<<trigger_sequence<<"\n";
+    ff<<tempo<<"\n";
+    ff<<beat<<"\n";
+    ff<<seed[0]<<"\n";
+    ff<<seed[1]<<"\n";
+    ff<<step[0]<<"\n";
+    ff<<step[1]<<"\n";
+    ff<<octaves<<"\n";
+    ff<<steps<<"\n";
 
-    // ff<<trigger_sequence<<"\n";
+    ff<<direction[0]<<"\n";
+    ff<<direction[1]<<"\n";
 
-    // ff<<tempo<<"\n";
-    // ff<<beat<<"\n";
-    // ff<<seed<<"\n";
-    // ff<<octaves<<"\n";
+    ff<<algorhithm[0]<<"\n";
+    ff<<algorhithm[1]<<"\n";
 
-    // ff<<if_square_a<<"\n";
-    // ff<<if_square_b<<"\n";
-               
-    // for(auto i: note_set) ff<<i<<"\n";
-    // for(auto i: oct_set ) ff<<i<<"\n";
-
-
-	// for(int i=0; i<nn; i++)
-	// {
-	// 	ff<<oct[i]<<"\n"; 
-    // 	ff<<note[i]<<"\n";
-	// }
+	for(int i=0; i<nn; i++)
+	{
+        ff<<note_set[i]<<"\n";
+        ff<<oct_set[i]<<"\n";
+		ff<<oct[i]<<"\n"; 
+    	ff<<note[i]<<"\n";
+	}
 
     ff.close();
 }
@@ -337,28 +342,36 @@ void preset::load()
         ff>>lfo[i].frequency;
     }
 
-    // for(int i=0; i<oscn; i++) ff>>form_vco[i];
+    ///////////////////////////////////////////////////////////
+    // Sequencer //////////////////////////////////////////////
+    
+    ff>>trigger_sequence;
+    ff>>tempo;
+    ff>>beat;
+    ff>>seed[0];
+    ff>>seed[1];
+    ff>>step[0];
+    ff>>step[1];
+    ff>>octaves;
+    ff>>steps;
 
-    // ff>>tempo;
-    // ff>>beat;
-    // ff>>seed;
-    // ff>>octaves;
-    // int f=0;
+    ff>>direction[0];
+    ff>>direction[1];
 
-	// for(int i=0; i<nn; i++)
-	// {
-	// 	ff>>f;
-    //     note_set[i] = f;
-    //     f = 0;
+    ff>>algorhithm[0];
+    ff>>algorhithm[1];
 
-	// 	ff>>oct_set[i];
-	// 	ff>>oct[i];
-    // 	ff>>note[i];
-	// }
+    int f=0;
 
-    // ff>>trigger_sequence;
-    // ff>>if_square_a;
-    // ff>>if_square_b;
+	for(int i=0; i<nn; i++)
+	{
+		ff>>f;
+        note_set[i] = f;
+        f = 0;
+		ff>>oct_set[i];
+		ff>>oct[i];
+    	ff>>note[i];
+	}
 
 
     ff.close();
